@@ -7,7 +7,8 @@ function Invoke-VaultApi {
         $Method = 'Get',
         $QueryParams = '',
         $Body = '',
-        $ContentType = 'application/json'
+        $ContentType = 'application/json',
+        $OutFile = ''
     )
 
     if (!$script:BwRestServer.Hostname) {
@@ -40,5 +41,11 @@ function Invoke-VaultApi {
         $RestMethod.Headers = $Headers
     }
     Write-Verbose ($Headers | ConvertTo-Json)
-    Invoke-RestMethod @RestMethod -SkipHttpErrorCheck
+
+    if ($OutFile) {
+        Invoke-WebRequest @RestMethod -OutFile $OutFile
+    }
+    else {
+        Invoke-RestMethod @RestMethod -SkipHttpErrorCheck
+    }
 }

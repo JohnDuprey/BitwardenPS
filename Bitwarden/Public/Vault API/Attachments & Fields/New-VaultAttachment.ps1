@@ -6,7 +6,7 @@ function New-VaultAttachment {
     .DESCRIPTION
     POSTS multipart form data to /attachment
     
-    .PARAMETER Id
+    .PARAMETER ItemId
     Item guid
     
     .PARAMETER Content
@@ -22,7 +22,7 @@ function New-VaultAttachment {
     [cmdletbinding(DefaultParameterSetName = 'Content')]
     Param (
         [parameter(Mandatory = $true)]
-        $Id,
+        $ItemId,
 
         [parameter(ParameterSetName = 'Content', Mandatory = $True)]
         [string]$Content,
@@ -54,7 +54,7 @@ function New-VaultAttachment {
         $MultipartContent.Add($FileContent)
 
         $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-        $QueryParams.Add('itemid', $Id) | Out-Null
+        $QueryParams.Add('itemid', $ItemId) | Out-Null
 
         try {
             $response = Invoke-VaultApi -Endpoint 'attachment' -QueryParams $QueryParams -Method Post -Body $MultipartContent -ContentType 'multipart/form-data'

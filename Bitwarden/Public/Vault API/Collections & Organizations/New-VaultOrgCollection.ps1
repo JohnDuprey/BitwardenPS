@@ -31,7 +31,7 @@ function New-VaultOrgCollection {
     }
     
     if (-not $OrgCollectionValid) { 
-        Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string and and id property must be specified"
+        Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string"
         return
     }
     

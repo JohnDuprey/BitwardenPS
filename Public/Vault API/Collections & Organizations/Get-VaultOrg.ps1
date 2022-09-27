@@ -1,4 +1,4 @@
-function Get-VaultOrgs {
+function Get-VaultOrg {
     <#
     .SYNOPSIS
     Gets Bitwarden Vault Organizations
@@ -18,10 +18,11 @@ function Get-VaultOrgs {
         $Search = ''
     )
     $Endpoint = 'list/object/organizations'
+    $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
     if ($Search -ne '') {
-        $Endpoint = '{0}?search={1}' -f $Endpoint, $Search
+        $QueryParams.Add('search', $Search) | Out-Null
     }
-    $Request = Invoke-VaultApi -Endpoint $Endpoint
+    $Request = Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
 
     if ($Request.success) {
         $Request.data.data

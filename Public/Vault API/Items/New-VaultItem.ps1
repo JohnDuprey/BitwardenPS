@@ -1,13 +1,10 @@
-function Update-VaultItem {
+function New-VaultItem {
     <#
     .SYNOPSIS
-    Updates Bitwarden Vault Items
+    Creates Bitwarden Vault Items
     
     .DESCRIPTION
-    PUT /object/item/{id} 
-    
-    .PARAMETER Id
-    Item guid
+    Calls POST /object/item to create vault items
     
     .PARAMETER Item
     Full item object in pscustoobject or json format
@@ -16,13 +13,9 @@ function Update-VaultItem {
     https://bitwarden.com/help/vault-management-api/
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'BodyUpdate')]
+    [CmdletBinding()]
     Param(
-        [Parameter(ParameterSetName = 'BodyUpdate', Mandatory = $true)]
-        $Id,
-
-        [Parameter(ParameterSetName = 'BodyUpdate')]
-        [Parameter(ValueFromPipeline, ParameterSetName = 'FullObject')]
+        [Parameter(ValueFromPipeline, Mandatory = $true)]
         $Item
     )
 
@@ -30,26 +23,21 @@ function Update-VaultItem {
 
     if ($Item.GetType().Name -eq 'pscustomobject') {
         $Body = $Item | ConvertTo-Json -Depth 10
-        $Id = $Item.id
         $ItemValid = $true
     }
     elseif (Test-Json -Json $Item) {
-        $Object = $Item | ConvertFrom-Json
-        $Id = $Object.id
         $Body = $Item
         $ItemValid = $true
     }
     
-    if (-not $Id -or -not $ItemValid) { 
+    if (-not $ItemValid) { 
         Write-Error "Input validation failed for 'Item', valid types are pscustomobject or JSON string and and id property must be specified"
         return
     }
-
-    $Endpoint = 'object/item/{0}' -f $Id
-
+    
     $VaultApi = @{
-        Method   = 'Put'
-        Endpoint = $Endpoint
+        Method   = 'POST'
+        Endpoint = 'object/item'
         Body     = $Body
     }
     

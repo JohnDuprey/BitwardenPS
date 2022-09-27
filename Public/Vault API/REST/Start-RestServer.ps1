@@ -41,6 +41,16 @@ function Start-RestServer {
         }
         $Proc = Start-Process -FilePath $bw.Path -ArgumentList $Arguments -NoNewWindow -PassThru -ErrorAction Stop
         
+        $OldProgPref = $global:ProgressPreference
+        $global:ProgressPreference = 'SilentlyContinue'
+        
+        do {
+            $VaultRest = Test-NetConnection -ComputerName $Hostname -Port $Port -InformationLevel Quiet -WarningAction SilentlyContinue
+            Start-Sleep -Seconds 1
+        } while (-not $VaultRest)
+
+        $global:ProgressPreference = $OldProgPref
+
         $script:BwRestServer = [PSCustomObject]@{
             PID      = $Proc.Id
             Port     = $Port

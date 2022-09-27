@@ -1,4 +1,4 @@
-function Invoke-Cli {
+function Invoke-VaultCli {
     <#
     .SYNOPSIS
     Runs Bitwarden Cli commands

@@ -10,14 +10,7 @@ function Invoke-VaultApi {
     )
 
     if (!$script:BwRestServer.Hostname) {
-        $Server = Start-BwRestServer
-        do {
-            $OldProgPref = $global:ProgressPreference
-            $global:ProgressPreference = 'SilentlyContinue'
-            $VaultRest = Test-NetConnection -ComputerName $Server.Hostname -Port $Server.Port -InformationLevel Quiet -WarningAction SilentlyContinue
-            Start-Sleep -Seconds 1
-        } while (-not $VaultRest)
-        $global:ProgressPreference = $OldProgPref
+        Start-BwRestServer | Out-Null
     }
 
     $Uri = 'http://{0}:{1}/{2}' -f $script:BwRestServer.Hostname, $script:BwRestServer.Port, $Endpoint
@@ -29,6 +22,7 @@ function Invoke-VaultApi {
     }
 
     Write-Verbose $Uri
+    
     $Headers = @{
         'Accept' = 'application/json'
     }

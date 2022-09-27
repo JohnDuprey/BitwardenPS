@@ -1,10 +1,10 @@
-function Get-VaultItems {
+function Get-VaultItem {
     <#
     .SYNOPSIS
     Gets Bitwarden Vault Items
     
     .DESCRIPTION
-    Calls /list/object/items 
+    Calls /list/object/items or /object/item/{id} to retrieve vault items
     
     .PARAMETER Id
     Item guid

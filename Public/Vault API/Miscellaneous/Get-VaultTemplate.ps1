@@ -26,5 +26,5 @@ function Get-VaultTemplate {
         $Type
     )
 
-    Invoke-Cli -Arguments $Arguments
+    Invoke-VaultCli -Arguments $Arguments
 }

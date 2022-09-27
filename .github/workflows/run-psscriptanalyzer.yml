@@ -11,11 +11,9 @@ name: PSScriptAnalyzer
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main]
   pull_request:
-    branches: [main, dev]
-  schedule:
-    - cron: "22 22 * * 5"
+    branches: [main]
 
 jobs:
   build:
@@ -37,6 +35,6 @@ jobs:
 
       # Upload the SARIF file generated in the previous step
       - name: Upload SARIF results file
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: results.sarif

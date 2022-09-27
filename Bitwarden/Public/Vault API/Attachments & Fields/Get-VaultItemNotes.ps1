@@ -24,6 +24,7 @@ function Get-VaultItemNotes {
         $Request.data.data
     }
     else {
-        $Request
+        Write-Host $Request.message
+        $Request.success
     } 
 }

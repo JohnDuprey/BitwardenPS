@@ -1,7 +1,7 @@
-function Remove-VaultItem {
+function Remove-VaultFolder {
     <#
     .SYNOPSIS
-    Deletes Bitwarden Vault Items
+    Deletes Bitwarden Vault Folder
     
     .DESCRIPTION
     Calls DELETE /object/item/{id} to move items to the trash
@@ -19,7 +19,7 @@ function Remove-VaultItem {
         $Id
     )
     
-    $Endpoint = 'object/item/{0}' -f $Id
+    $Endpoint = 'object/folder/{0}' -f $Id
 
     $VaultApi = @{
         Method   = 'Delete'

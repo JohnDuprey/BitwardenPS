@@ -1,10 +1,10 @@
-function Get-VaultOrg {
+function Get-VaultCollections {
     <#
     .SYNOPSIS
-    Gets Bitwarden Vault Organizations
+    Gets Bitwarden Vault Collections
     
     .DESCRIPTION
-    Calls /list/object/organizations 
+    Calls /list/object/collections 
     
     .PARAMETER Search
     Organization name to search for
@@ -17,7 +17,8 @@ function Get-VaultOrg {
     Param(
         $Search = ''
     )
-    $Endpoint = 'list/object/organizations'
+    
+    $Endpoint = 'list/object/collections'
     $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
     if ($Search -ne '') {
         $QueryParams.Add('search', $Search) | Out-Null

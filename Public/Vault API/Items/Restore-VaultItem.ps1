@@ -1,10 +1,10 @@
-function Remove-VaultItem {
+function Restore-VaultItem {
     <#
     .SYNOPSIS
-    Deletes Bitwarden Vault Items
+    Restores deleted Bitwarden Vault Items
     
     .DESCRIPTION
-    Calls DELETE /object/item/{id} to move items to the trash
+    PUT /restore/item/{id} 
     
     .PARAMETER Id
     Item guid
@@ -19,10 +19,10 @@ function Remove-VaultItem {
         $Id
     )
     
-    $Endpoint = 'object/item/{0}' -f $Id
+    $Endpoint = 'restore/item/{0}' -f $Id
 
     $VaultApi = @{
-        Method   = 'Delete'
+        Method   = 'Post'
         Endpoint = $Endpoint
         Body     = $Body
     }

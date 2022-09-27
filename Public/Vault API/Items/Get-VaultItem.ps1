@@ -8,6 +8,9 @@ function Get-VaultItem {
     
     .PARAMETER Id
     Item guid
+
+    .PARAMETER AsCredential
+    Returns login property as credential object
     
     .PARAMETER OrganizationId
     Organization Guid

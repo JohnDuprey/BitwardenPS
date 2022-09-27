@@ -6,7 +6,8 @@ function Invoke-VaultApi {
         [ValidateSet('Get', 'Put', 'Post', 'Delete')]
         $Method = 'Get',
         $QueryParams = '',
-        $Body = ''
+        $Body = '',
+        $ContentType = 'application/json'
     )
 
     if (!$script:BwRestServer.Hostname) {
@@ -22,7 +23,7 @@ function Invoke-VaultApi {
     }
 
     Write-Verbose $Uri
-    
+
     $Headers = @{
         'Accept' = 'application/json'
     }
@@ -32,11 +33,12 @@ function Invoke-VaultApi {
     }
 
     if ($Method -eq 'Post' -or $Method -eq 'Put') {
-        $headers.'Content-Type' = 'application/json'
+        $headers.'Content-Type' = $ContentType
         if ($Body -ne '') {
             $RestMethod.Body = $Body
         }
         $RestMethod.Headers = $Headers
     }
+    Write-Verbose ($Headers | ConvertTo-Json)
     Invoke-RestMethod @RestMethod -SkipHttpErrorCheck
 }

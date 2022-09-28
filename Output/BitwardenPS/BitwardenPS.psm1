@@ -57,8 +57,9 @@ function Invoke-VaultApi {
         $OutFile = ''
     )
 
-    Start-BwRestServer | Out-Null
+    Start-BwRestServer
 
+    Write-Verbose ($script:BwRestServer | ConvertTo-Json)
     $Uri = 'http://{0}:{1}/{2}' -f $script:BwRestServer.Hostname, $script:BwRestServer.Port, $Endpoint
 
     if ($QueryParams -ne '') {
@@ -93,7 +94,7 @@ function Invoke-VaultApi {
         Invoke-RestMethod @RestMethod -SkipHttpErrorCheck
     }
 }
-#EndRegion '.\Private\Invoke\Invoke-VaultApi.ps1' 50
+#EndRegion '.\Private\Invoke\Invoke-VaultApi.ps1' 51
 #Region '.\Private\Invoke\Invoke-VaultCli.ps1' 0
 function Invoke-VaultCli {
     <#
@@ -1752,7 +1753,7 @@ function Unlock-Vault {
     # Set session variable for cli commands
     [Environment]::SetEnvironmentVariable('BW_SESSION', $Request.data.raw)
 
-    Write-Host $Request.data.title
+    Write-Verbose $Request.data.title
     $Request.success
 }
 #EndRegion '.\Public\Vault API\Lock & Unlock\Unlock-Vault.ps1' 33
@@ -1876,12 +1877,15 @@ function Start-RestServer {
         $Hostname = 'localhost'
     )
 
-    $RunningCli = Get-Process bw -ErrorAction SilentlyContinue
-    if ($RunningCli.Id -ne $script:BwRestServer.PID) {
+    try {
+        $RunningCli = Get-Process -PID $script:BwRestServer.PID -ErrorAction SilentlyContinue
+    }
+    catch {
         Stop-RestServer
+        $RunningCli = $false
     }
 
-    if (-not $script:BwRestServer) {
+    if (-not $RunningCli) {
         $Arguments = @(
             'serve'
             "--port $Port"
@@ -1894,6 +1898,7 @@ function Start-RestServer {
                 Write-Error 'Bitwarden CLI is not installed'
                 return $false
             }
+            Write-Verbose 'Starting REST server'
             $Proc = Start-Process -FilePath $bw.Path -ArgumentList $Arguments -NoNewWindow -PassThru -ErrorAction Stop
         
             $OldProgPref = $global:ProgressPreference
@@ -1918,7 +1923,7 @@ function Start-RestServer {
         }
     }
 }
-#EndRegion '.\Public\Vault API\REST\Start-RestServer.ps1' 67
+#EndRegion '.\Public\Vault API\REST\Start-RestServer.ps1' 71
 #Region '.\Public\Vault API\REST\Stop-RestServer.ps1' 0
 function Stop-RestServer {
     <#
@@ -1941,9 +1946,8 @@ function Stop-RestServer {
         $RunningCli | Stop-Process
         $script:BwRestServer = $null
     }
-    
 }
-#EndRegion '.\Public\Vault API\REST\Stop-RestServer.ps1' 24
+#EndRegion '.\Public\Vault API\REST\Stop-RestServer.ps1' 23
 #Region '.\Public\Vault API\Send\Get-Send.ps1' 0
 function Get-Send {
     <#

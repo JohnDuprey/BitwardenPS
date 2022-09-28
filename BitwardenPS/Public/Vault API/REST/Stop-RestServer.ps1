@@ -19,5 +19,4 @@ function Stop-RestServer {
         $RunningCli | Stop-Process
         $script:BwRestServer = $null
     }
-    
 }

@@ -53,7 +53,8 @@ function Invoke-VaultApi {
         $Method = 'Get',
         $QueryParams = '',
         $Body = '',
-        $ContentType = 'application/json'
+        $ContentType = 'application/json',
+        $OutFile = ''
     )
 
     if (!$script:BwRestServer.Hostname) {
@@ -86,9 +87,15 @@ function Invoke-VaultApi {
         $RestMethod.Headers = $Headers
     }
     Write-Verbose ($Headers | ConvertTo-Json)
-    Invoke-RestMethod @RestMethod -SkipHttpErrorCheck
+
+    if ($OutFile) {
+        Invoke-WebRequest @RestMethod -OutFile $OutFile
+    }
+    else {
+        Invoke-RestMethod @RestMethod -SkipHttpErrorCheck
+    }
 }
-#EndRegion '.\Private\Invoke\Invoke-VaultApi.ps1' 45
+#EndRegion '.\Private\Invoke\Invoke-VaultApi.ps1' 52
 #Region '.\Private\Invoke\Invoke-VaultCli.ps1' 0
 function Invoke-VaultCli {
     <#
@@ -374,6 +381,245 @@ function Send-PublicMemberInvite {
     Invoke-PublicApi -Endpoint $Endpoint -Method Post
 }
 #EndRegion '.\Public\Public API\Members\Send-PublicMemberInvite.ps1' 11
+#Region '.\Public\Vault API\Attachments & Fields\Get-VaultAttachment.ps1' 0
+function Get-VaultAttachment {
+    <#
+    .SYNOPSIS
+    Gets Bitwarden Vault Attachments
+    
+    .DESCRIPTION
+    Calls Get /object/attachment/{id} to download attachments
+    
+    .PARAMETER Id
+    Attachment id
+    
+    .PARAMETER ItemId
+    Item Guid
+
+    .PARAMETER FilePath
+    Path to save file
+    
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id,
+        [Parameter(Mandatory = $true)]
+        $ItemId,
+        $FilePath = ''
+    )
+
+    $Endpoint = 'object/attachment/{0}' -f $Id
+    $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+    $QueryParams.Add('itemid', $ItemId) | Out-Null
+
+    $VaultApi = @{
+        Endpoint    = $Endpoint
+        QueryParams = $QueryParams
+    }
+
+    if ($FilePath) {
+        $VaultApi.OutFile = $FilePath
+    }
+
+    Invoke-VaultApi @VaultApi
+}
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultAttachment.ps1' 46
+#Region '.\Public\Vault API\Attachments & Fields\Get-VaultItemNotes.ps1' 0
+function Get-VaultItemNotes {
+    <#
+    .SYNOPSIS
+    Returns Notes of a vault item
+    
+    .DESCRIPTION
+    Calls /object/notes/{id} endpoint to retrieve notes
+    
+    .PARAMETER Id
+    Item guid
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [cmdletbinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id
+    )
+
+    $Request = Invoke-VaultApi -Endpoint ('object/notes/{0}' -f $Id)
+    if ($Request.success) {
+        $Request.data.data
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    } 
+}
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemNotes.ps1' 31
+#Region '.\Public\Vault API\Attachments & Fields\Get-VaultItemPassword.ps1' 0
+function Get-VaultItemPassword {
+    <#
+    .SYNOPSIS
+    Returns password of a vault item
+    
+    .DESCRIPTION
+    Calls /object/password/{id} endpoint to retrieve password
+    
+    .PARAMETER Id
+    Item guid
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [cmdletbinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id
+    )
+
+    $Request = Invoke-VaultApi -Endpoint ('object/password/{0}' -f $Id)
+    if ($Request.success) {
+        $Request.data.data
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    } 
+}
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemPassword.ps1' 31
+#Region '.\Public\Vault API\Attachments & Fields\Get-VaultItemPwExposed.ps1' 0
+function Get-VaultItemPwExposed {
+    <#
+    .SYNOPSIS
+    Returns count of times a vault item password has been exposed
+    
+    .DESCRIPTION
+    Calls /object/exposed/{id} endpoint to retrieve count
+    
+    .PARAMETER Id
+    Item guid
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [cmdletbinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id
+    )
+
+    $Request = Invoke-VaultApi -Endpoint ('object/exposed/{0}' -f $Id)
+    if ($Request.success) {
+        $Request.data.data
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    } 
+}
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemPwExposed.ps1' 31
+#Region '.\Public\Vault API\Attachments & Fields\Get-VaultItemTotp.ps1' 0
+function Get-VaultItemTotp {
+    <#
+    .SYNOPSIS
+    Returns TOTP of a vault item
+    
+    .DESCRIPTION
+    Calls /object/totp/{id} endpoint to retrieve TOTP
+    
+    .PARAMETER Id
+    Item guid
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [cmdletbinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id
+    )
+
+    $Request = Invoke-VaultApi -Endpoint ('object/totp/{0}' -f $Id)
+    if ($Request.success) {
+        $Request.data.data
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    } 
+}
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemTotp.ps1' 31
+#Region '.\Public\Vault API\Attachments & Fields\Get-VaultItemUri.ps1' 0
+function Get-VaultItemUri {
+    <#
+    .SYNOPSIS
+    Returns URI of a vault item
+    
+    .DESCRIPTION
+    Calls /object/uri/{id} endpoint to retrieve URI
+    
+    .PARAMETER Id
+    Item guid
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [cmdletbinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id
+    )
+
+    $Request = Invoke-VaultApi -Endpoint ('object/uri/{0}' -f $Id)
+    if ($Request.success) {
+        $Request.data.data
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    } 
+}
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemUri.ps1' 31
+#Region '.\Public\Vault API\Attachments & Fields\Get-VaultItemUsername.ps1' 0
+function Get-VaultItemUsername {
+    <#
+    .SYNOPSIS
+    Returns username of a vault item
+    
+    .DESCRIPTION
+    Calls /object/username/{id} endpoint to retrieve username
+    
+    .PARAMETER Id
+    Item guid
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [cmdletbinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id
+    )
+
+    $Request = Invoke-VaultApi -Endpoint ('object/username/{0}' -f $Id)
+    if ($Request.success) {
+        $Request.data.data
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    } 
+}
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemUsername.ps1' 31
 #Region '.\Public\Vault API\Attachments & Fields\New-VaultAttachment.ps1' 0
 function New-VaultAttachment {
     <#
@@ -447,8 +693,227 @@ function New-VaultAttachment {
     }
 }
 #EndRegion '.\Public\Vault API\Attachments & Fields\New-VaultAttachment.ps1' 72
-#Region '.\Public\Vault API\Collections & Organizations\Get-VaultOrg.ps1' 0
-function Get-VaultOrg {
+#Region '.\Public\Vault API\Attachments & Fields\Remove-VaultAttachment.ps1' 0
+function Remove-VaultAttachment {
+    <#
+    .SYNOPSIS
+    Deletes Bitwarden Vault Attachments
+    
+    .DESCRIPTION
+    Calls DELETE /object/item/{id} to move items to the trash
+    
+    .PARAMETER Id
+    Attachment id
+
+    .PARAMETER ItemId
+    Item Guid
+    
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id,
+        [Parameter(Mandatory = $true)]
+        $ItemId
+    )
+    
+    $Endpoint = 'object/attachment/{0}' -f $Id
+    $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+    $QueryParams.Add('itemid', $ItemId) | Out-Null
+
+    $VaultApi = @{
+        Method      = 'Delete'
+        Endpoint    = $Endpoint
+        Body        = $Body
+        QueryParams = $QueryParams
+    }
+    
+    Invoke-VaultApi @VaultApi
+}
+#EndRegion '.\Public\Vault API\Attachments & Fields\Remove-VaultAttachment.ps1' 40
+#Region '.\Public\Vault API\Collections & Organizations\Confirm-VaultOrgMember.ps1' 0
+function Confirm-VaultOrgMember {
+    <#
+    .SYNOPSIS
+    Gets Bitwarden Vault Org Collections
+    
+    .DESCRIPTION
+    Calls /list/object/org-members
+
+    .PARAMETER Id
+    Guid of Org Member
+
+    .PARAMETER OrganizationId
+    Guid of Organization
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id,
+        [Parameter(Mandatory = $true)]
+        $OrganizationId
+    )
+
+    $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+    $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
+
+    $Endpoint = 'confirm/org-member/{0}' -f $Id
+    Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
+}
+#EndRegion '.\Public\Vault API\Collections & Organizations\Confirm-VaultOrgMember.ps1' 33
+#Region '.\Public\Vault API\Collections & Organizations\Get-VaultCollections.ps1' 0
+function Get-VaultCollections {
+    <#
+    .SYNOPSIS
+    Gets Bitwarden Vault Collections
+    
+    .DESCRIPTION
+    Calls /list/object/collections 
+    
+    .PARAMETER Search
+    Organization name to search for
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [CmdletBinding()]
+    Param(
+        $Search = ''
+    )
+    
+    $Endpoint = 'list/object/collections'
+    $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+    if ($Search -ne '') {
+        $QueryParams.Add('search', $Search) | Out-Null
+    }
+    $Request = Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
+
+    if ($Request.success) {
+        $Request.data.data
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    }
+
+}
+#EndRegion '.\Public\Vault API\Collections & Organizations\Get-VaultCollections.ps1' 37
+#Region '.\Public\Vault API\Collections & Organizations\Get-VaultOrgCollection.ps1' 0
+function Get-VaultOrgCollection {
+    <#
+    .SYNOPSIS
+    Gets Bitwarden Vault Org Collections
+    
+    .DESCRIPTION
+    Calls /list/object/org-collections or /object/org-collection/{id} 
+    
+    .PARAMETER Id
+    Guid of Collection
+
+    .PARAMETER OrganizationId
+    Guid of Organization
+
+    .PARAMETER Search
+    Search parameters
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [CmdletBinding(DefaultParameterSetName = 'List')]
+    Param(
+        [Parameter(ParameterSetName = 'Single', Mandatory = $true)]
+        $Id,
+
+        [Parameter(ParameterSetName = 'Single', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'List', Mandatory = $true)]
+        $OrganizationId,
+        
+        [Parameter(ParameterSetName = 'List')]
+        $Search = ''
+    )
+
+    $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+    $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
+
+    switch ($PSCmdlet.ParameterSetName) {
+        'List' {
+            $Endpoint = 'list/object/org-collections'
+            
+            if ($Search -ne '') {
+                $QueryParams.Add('search', $Search) | Out-Null
+            }
+
+        }
+        'Single' {
+            $Endpoint = 'object/org-collection/{0}' -f $Id
+        }
+    }
+    $Request = Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
+
+    if ($Request.success) {
+        if ($Request.data.data) {
+            $Request.data.data
+        }
+        elseif ($Request.data) {
+            $Request.data
+        }  
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    }
+}
+#EndRegion '.\Public\Vault API\Collections & Organizations\Get-VaultOrgCollection.ps1' 66
+#Region '.\Public\Vault API\Collections & Organizations\Get-VaultOrgMembers.ps1' 0
+function Get-VaultOrgMembers {
+    <#
+    .SYNOPSIS
+    Gets Bitwarden Vault Org Collections
+    
+    .DESCRIPTION
+    Calls /list/object/org-members
+
+    .PARAMETER OrganizationId
+    Guid of Organization
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $OrganizationId
+    )
+
+    $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+    $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
+
+    $Endpoint = 'list/object/org-members'
+    $Request = Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
+
+    if ($Request.success) {
+        if ($Request.data.data) {
+            $Request.data.data
+        }
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    }
+}
+#EndRegion '.\Public\Vault API\Collections & Organizations\Get-VaultOrgMembers.ps1' 38
+#Region '.\Public\Vault API\Collections & Organizations\Get-VaultOrgs.ps1' 0
+function Get-VaultOrgs {
     <#
     .SYNOPSIS
     Gets Bitwarden Vault Organizations
@@ -467,6 +932,7 @@ function Get-VaultOrg {
     Param(
         $Search = ''
     )
+    
     $Endpoint = 'list/object/organizations'
     $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
     if ($Search -ne '') {
@@ -483,7 +949,370 @@ function Get-VaultOrg {
     }
 
 }
-#EndRegion '.\Public\Vault API\Collections & Organizations\Get-VaultOrg.ps1' 36
+#EndRegion '.\Public\Vault API\Collections & Organizations\Get-VaultOrgs.ps1' 37
+#Region '.\Public\Vault API\Collections & Organizations\Move-VaultItemToCollection.ps1' 0
+function Move-VaultItemToCollection {
+    <#
+    .SYNOPSIS
+    Moves Bitwarden Vault Item to Collection
+    
+    .DESCRIPTION
+    Calls /move/{itemid}/{organizationid} 
+    
+    .PARAMETER ItemId
+    Guid of Item
+
+    .PARAMETER OrganizationId
+    Guid of Organization
+
+    .PARAMETER CollectionIds
+    List of CollectionIds
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $ItemId,
+        [Parameter(Mandatory = $true)]
+        $OrganizationId,
+        [Parameter(Mandatory = $true)]
+        [string[]]$CollectionIds
+    )
+
+    $Endpoint = 'move/{0}/{1}' -f $ItemId, $OrganizationId
+    $Body = @($CollectionIds) | ConvertTo-Json
+
+    $VaultApi = @{
+        Endpoint = $Endpoint
+        Body     = $Body
+        Method   = 'Post'
+    }
+
+    $Request = Invoke-VaultApi @VaultApi
+
+    if ($Request.success) {
+        $Request.data
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    } 
+}
+#EndRegion '.\Public\Vault API\Collections & Organizations\Move-VaultItemToCollection.ps1' 51
+#Region '.\Public\Vault API\Collections & Organizations\New-VaultOrgCollection.ps1' 0
+function New-VaultOrgCollection {
+    <#
+    .SYNOPSIS
+    Creates Bitwarden Vault Org Collections
+    
+    .DESCRIPTION
+    Calls POST /object/org-collection to create new org collections
+    
+    .PARAMETER OrgCollection
+    Full item object in pscustoobject or json format
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline, Mandatory = $true)]
+        $OrgCollection
+    )
+
+    $OrgCollectionValid = $false
+
+    if ($OrgCollection.GetType().Name -eq 'pscustomobject') {
+        $Body = $OrgCollection | ConvertTo-Json -Depth 10
+        $OrgCollectionValid = $true
+    }
+    elseif (Test-Json -Json $OrgCollection) {
+        $Body = $OrgCollection
+        $OrgCollectionValid = $true
+    }
+    
+    if (-not $OrgCollectionValid) { 
+        Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string"
+        return
+    }
+    
+    $VaultApi = @{
+        Method   = 'POST'
+        Endpoint = 'object/org-collection'
+        Body     = $Body
+    }
+    
+    $Request = Invoke-VaultApi @VaultApi
+
+    if ($Request.success) {
+        if ($Request.data) {
+            $Request.data
+        }
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    }
+}
+#EndRegion '.\Public\Vault API\Collections & Organizations\New-VaultOrgCollection.ps1' 56
+#Region '.\Public\Vault API\Collections & Organizations\Remove-VaultOrgCollection.ps1' 0
+function Remove-VaultOrgCollection {
+    <#
+    .SYNOPSIS
+    Deletes Bitwarden Org Collections Items
+    
+    .DESCRIPTION
+    Calls DELETE /object/org-collection/{id} to move organization collections to the trash, this does not delete the items inside
+    
+    .PARAMETER Id
+    OrgCollection guid
+    
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id,
+        [Parameter(Mandatory = $true)]
+        $OrganizationId
+    )
+    
+    $Endpoint = 'object/org-collection/{0}' -f $Id
+
+    $VaultApi = @{
+        Method   = 'Delete'
+        Endpoint = $Endpoint
+    }
+    
+    Invoke-VaultApi @VaultApi
+}
+#EndRegion '.\Public\Vault API\Collections & Organizations\Remove-VaultOrgCollection.ps1' 33
+#Region '.\Public\Vault API\Collections & Organizations\Update-VaultOrgCollection.ps1' 0
+function Update-VaultOrgCollection {
+    <#
+    .SYNOPSIS
+    Updates Bitwarden Vault Items
+    
+    .DESCRIPTION
+    PUT /object/item/{id} 
+    
+    .PARAMETER Id
+    Item guid
+    
+    .PARAMETER Item
+    Full item object in pscustoobject or json format
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding(DefaultParameterSetName = 'BodyUpdate')]
+    Param(
+        [Parameter(ParameterSetName = 'BodyUpdate', Mandatory = $true)]
+        $Id,
+
+        [Parameter(ParameterSetName = 'BodyUpdate')]
+        [Parameter(ValueFromPipeline, ParameterSetName = 'FullObject')]
+        $OrgCollection
+    )
+
+    $OrgCollectonValid = $false
+
+    if ($OrgCollection.GetType().Name -eq 'pscustomobject') {
+        $Body = $OrgCollection | ConvertTo-Json -Depth 10
+        if ($OrgCollection.id) { $Id = $Item.id }
+        $OrgCollectonValid = $true
+    }
+    elseif (Test-Json -Json $OrgCollection) {
+        $Object = $OrgCollection | ConvertFrom-Json
+        if ($Object.id) {
+            $Id = $Object.id
+        }
+        $Body = $OrgCollection
+        $OrgCollectonValid = $true
+    }
+    
+    if (-not $Id -or -not $OrgCollectonValid) { 
+        Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string and and id property must be specified"
+        return
+    }
+
+    $Endpoint = 'object/org-collection/{0}' -f $Id
+
+    $VaultApi = @{
+        Method   = 'Put'
+        Endpoint = $Endpoint
+        Body     = $Body
+    }
+    
+    $Request = Invoke-VaultApi @VaultApi
+
+    if ($Request.success) {
+        if ($Request.data) {
+            $Request.data
+        }
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    }
+}
+#EndRegion '.\Public\Vault API\Collections & Organizations\Update-VaultOrgCollection.ps1' 70
+#Region '.\Public\Vault API\Folders\Get-VaultFolder.ps1' 0
+function Get-VaultFolder {
+    <#
+    .SYNOPSIS
+    Gets Bitwarden Vault Folder
+    
+    .DESCRIPTION
+    Calls /list/object/folders or /object/folder/{id} to retrieve vault folders
+    
+    .PARAMETER Id
+    Folder guid
+    
+    .PARAMETER Search
+    Search terms
+    
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding(DefaultParameterSetName = 'List')]
+    Param(
+        [Parameter(ParameterSetName = 'Single', Mandatory = $true)]
+        $Id,
+        [Parameter(ParameterSetName = 'List')]
+        $Search = ''
+    )
+
+    switch ($PSCmdlet.ParameterSetName) {
+        'List' {
+            $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+
+            $Endpoint = 'list/object/folders'
+            if ($Search -ne '') {
+                $QueryParams.Add('search', $Search) | Out-Null
+            }
+            $VaultApi = @{
+                Endpoint    = $Endpoint
+                QueryParams = $QueryParams
+            }
+        }   
+        'Single' {
+            $Endpoint = 'object/folder/{0}' -f $Id
+
+            $VaultApi = @{
+                Endpoint = $Endpoint
+            }
+        } 
+    }
+    
+    $Request = Invoke-VaultApi @VaultApi
+
+    if ($Request.success) {
+        if ($Request.data.data) {
+            $Request.data.data
+        }
+        elseif ($Request.data) {
+            $Request.data
+        }
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    }
+}
+#EndRegion '.\Public\Vault API\Folders\Get-VaultFolder.ps1' 64
+#Region '.\Public\Vault API\Folders\Remove-VaultFolder.ps1' 0
+function Remove-VaultFolder {
+    <#
+    .SYNOPSIS
+    Deletes Bitwarden Vault Folder
+    
+    .DESCRIPTION
+    Calls DELETE /object/item/{id} to move items to the trash
+    
+    .PARAMETER Id
+    Item guid
+    
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id
+    )
+    
+    $Endpoint = 'object/folder/{0}' -f $Id
+
+    $VaultApi = @{
+        Method   = 'Delete'
+        Endpoint = $Endpoint
+    }
+    
+    Invoke-VaultApi @VaultApi
+}
+#EndRegion '.\Public\Vault API\Folders\Remove-VaultFolder.ps1' 31
+#Region '.\Public\Vault API\Folders\Update-VaultFolder.ps1' 0
+function Update-VaultItem {
+    <#
+    .SYNOPSIS
+    Updates Bitwarden Vault Folder
+    
+    .DESCRIPTION
+    PUT /object/folder/{id} 
+    
+    .PARAMETER Id
+    Item guid
+    
+    .PARAMETER Name
+    Name of folder
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id,
+        [Parameter(Mandatory = $true)]
+        $Name
+    )
+
+    $Body = @{
+        name = $Name
+    } | ConvertTo-Json
+
+    $Endpoint = 'object/folder/{0}' -f $Id
+
+    $VaultApi = @{
+        Method   = 'Put'
+        Endpoint = $Endpoint
+        Body     = $Body
+    }
+    
+    $Request = Invoke-VaultApi @VaultApi
+
+    if ($Request.success) {
+        if ($Request.data) {
+            $Request.data
+        }
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    }
+}
+#EndRegion '.\Public\Vault API\Folders\Update-VaultFolder.ps1' 51
 #Region '.\Public\Vault API\Items\Get-VaultItem.ps1' 0
 function Get-VaultItem {
     <#
@@ -678,12 +1507,11 @@ function Remove-VaultItem {
     $VaultApi = @{
         Method   = 'Delete'
         Endpoint = $Endpoint
-        Body     = $Body
     }
     
     Invoke-VaultApi @VaultApi
 }
-#EndRegion '.\Public\Vault API\Items\Remove-VaultItem.ps1' 32
+#EndRegion '.\Public\Vault API\Items\Remove-VaultItem.ps1' 31
 #Region '.\Public\Vault API\Items\Restore-VaultItem.ps1' 0
 function Restore-VaultItem {
     <#
@@ -1025,3 +1853,259 @@ function Stop-RestServer {
     
 }
 #EndRegion '.\Public\Vault API\REST\Stop-RestServer.ps1' 23
+#Region '.\Public\Vault API\Send\Get-Send.ps1' 0
+function Get-Send {
+    <#
+    .SYNOPSIS
+    Gets Bitwarden Sends
+    
+    .DESCRIPTION
+    Calls /list/object/send or /object/send/{id} 
+    
+    .PARAMETER Id
+    Guid of Collection
+
+    .PARAMETER Search
+    Search parameters
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+    
+    #>
+    [CmdletBinding(DefaultParameterSetName = 'List')]
+    Param(
+        [Parameter(ParameterSetName = 'Single', Mandatory = $true)]
+        $Id,
+        
+        [Parameter(ParameterSetName = 'List')]
+        $Search = ''
+    )
+
+    switch ($PSCmdlet.ParameterSetName) {
+        'List' {
+            $Endpoint = 'list/object/send'
+            $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+            if ($Search -ne '') {
+                $QueryParams.Add('search', $Search) | Out-Null
+            }
+
+        }
+        'Single' {
+            $Endpoint = 'object/send/{0}' -f $Id
+        }
+    }
+    $Request = Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
+
+    if ($Request.success) {
+        if ($Request.data.data) {
+            $Request.data.data
+        }
+        elseif ($Request.data) {
+            $Request.data
+        }  
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    }
+}
+#EndRegion '.\Public\Vault API\Send\Get-Send.ps1' 56
+#Region '.\Public\Vault API\Send\New-Send.ps1' 0
+function New-Send {
+    <#
+    .SYNOPSIS
+    Creates Bitwarden Send
+    
+    .DESCRIPTION
+    Calls POST /object/send to create a new send
+    
+    .PARAMETER OrgCollection
+    Full item object in pscustoobject or json format
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding(DefaultParameterSetName = 'SendParams')]
+    Param(
+        [Parameter(ParameterSetName = 'SendParams', Mandatory = $true)]
+        $Name,
+        [Parameter(ParameterSetName = 'SendParams')]
+        $Notes = '',
+        [Parameter(ParameterSetName = 'SendParams')]
+        $SendPass = '',
+        [Parameter(ParameterSetName = 'SendParams', Mandatory = $true)]
+        $Text,
+        [Parameter(ParameterSetName = 'SendParams')]
+        [int]$Days = 7,
+        [Parameter(ParameterSetName = 'SendParams')]
+        [int]$MaxAccessCount = 3,
+        [Parameter(ParameterSetName = 'SendParams')]
+        [switch]$HideText,
+        [Parameter(ParameterSetName = 'SendParams')]
+        [switch]$HideEmail,
+        [Parameter(ParameterSetName = 'FullObject', ValueFromPipeline, Mandatory = $true)]
+        $Send
+    )
+
+    $SendValid = $false
+    switch ($PSCmdlet.ParameterSetName) { 
+        'FullObject' {
+            if ($Send.GetType().Name -eq 'pscustomobject') {
+                $Body = $Send | ConvertTo-Json -Depth 10
+                $SendValid = $true
+            }
+            elseif (Test-Json -Json $Send) {
+                $Body = $Send
+                $SendValid = $true
+            }    
+            if (-not $SendValid) { 
+                Write-Error "Input validation failed for 'Send', valid types are pscustomobject or JSON string"
+                return
+            }
+        }
+        'SendParams' {
+            $Send = [pscustomobject]@{
+                name           = $Name
+                notes          = $Notes
+                type           = 0
+                text           = @{
+                    text   = $Text
+                    hidden = $HideText.IsPresent
+                }
+                file           = $null
+                maxAccessCount = $MaxAccessCount
+                deletionDate   = (Get-Date).AddDays($Days).ToUniversalTime()
+                expirationDate = (Get-Date).AddDays($Days).ToUniversalTime()
+                hideEmail      = $HideEmail.IsPresent
+                disabled       = $false
+                
+            }
+            if ($SendPass) { $Send.password = $SendPass }
+
+            $Body = $Send | ConvertTo-Json
+            Write-Verbose $Body
+        }
+    }
+
+
+    $VaultApi = @{
+        Method   = 'POST'
+        Endpoint = 'object/send'
+        Body     = $Body
+    }
+    
+    $Request = Invoke-VaultApi @VaultApi
+
+    if ($Request.success) {
+        if ($Request.data) {
+            $Request.data
+        }
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    }
+}
+#EndRegion '.\Public\Vault API\Send\New-Send.ps1' 97
+#Region '.\Public\Vault API\Send\Remove-Send.ps1' 0
+function Remove-Send {
+    <#
+    .SYNOPSIS
+    Deletes Bitwarden Send
+    
+    .DESCRIPTION
+    Calls DELETE /object/send/{id} to move items to the trash
+    
+    .PARAMETER Id
+    Send guid
+    
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $Id
+    )
+    
+    $Endpoint = 'object/send/{0}' -f $Id
+
+    $VaultApi = @{
+        Method   = 'Delete'
+        Endpoint = $Endpoint
+    }
+    
+    Invoke-VaultApi @VaultApi
+}
+#EndRegion '.\Public\Vault API\Send\Remove-Send.ps1' 31
+#Region '.\Public\Vault API\Send\Update-Send.ps1' 0
+function Update-Send {
+    <#
+    .SYNOPSIS
+    Updates Bitwarden Send
+    
+    .DESCRIPTION
+    PUT /object/send/{id} 
+    
+    .PARAMETER Id
+    Send guid
+    
+    .PARAMETER Send
+    Full Send object in pscustoobject or json format
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding(DefaultParameterSetName = 'BodyUpdate')]
+    Param(
+        [Parameter(ParameterSetName = 'BodyUpdate', Mandatory = $true)]
+        $Id,
+
+        [Parameter(ParameterSetName = 'BodyUpdate')]
+        [Parameter(ValueFromPipeline, ParameterSetName = 'FullObject')]
+        $Send
+    )
+
+    $SendValid = $false
+
+    if ($Send.GetType().Name -eq 'pscustomobject') {
+        $Body = $Send | ConvertTo-Json -Depth 10
+        $Id = $Send.id
+        $SendValid = $true
+    }
+    elseif (Test-Json -Json $Send) {
+        $Object = $Send | ConvertFrom-Json
+        $Id = $Object.id
+        $Body = $Send
+        $SendValid = $true
+    }
+    
+    if (-not $Id -or -not $SendValid) { 
+        Write-Error "Input validation failed for 'Item', valid types are pscustomobject or JSON string and and id property must be specified"
+        return
+    }
+
+    $Endpoint = 'object/send/{0}' -f $Id
+
+    $VaultApi = @{
+        Method   = 'Put'
+        Endpoint = $Endpoint
+        Body     = $Body
+    }
+    
+    $Request = Invoke-VaultApi @VaultApi
+
+    if ($Request.success) {
+        if ($Request.data) {
+            $Request.data
+        }
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    }
+}
+#EndRegion '.\Public\Vault API\Send\Update-Send.ps1' 68

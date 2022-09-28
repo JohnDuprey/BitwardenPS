@@ -11,9 +11,7 @@ function Invoke-VaultApi {
         $OutFile = ''
     )
 
-    if (!$script:BwRestServer.Hostname) {
-        Start-BwRestServer | Out-Null
-    }
+    Start-BwRestServer | Out-Null
 
     $Uri = 'http://{0}:{1}/{2}' -f $script:BwRestServer.Hostname, $script:BwRestServer.Port, $Endpoint
 

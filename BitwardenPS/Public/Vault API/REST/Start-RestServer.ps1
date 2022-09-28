@@ -23,42 +23,44 @@ function Start-RestServer {
     )
 
     $RunningCli = Get-Process bw -ErrorAction SilentlyContinue
-    if ($RunningCli -and -not $script:BwRestServer) {
-        $RunningCli | Stop-Process
+    if ($RunningCli.Id -ne $script:BwRestServer.PID) {
+        Stop-RestServer
     }
 
-    $Arguments = @(
-        'serve'
-        "--port $Port"
-        "--hostname $Hostname"    
-    )
+    if (-not $script:BwRestServer) {
+        $Arguments = @(
+            'serve'
+            "--port $Port"
+            "--hostname $Hostname"    
+        )
 
-    try {
-        $bw = Get-Command bw
-        if (!$bw) {
-            Write-Error 'Bitwarden CLI is not installed'
-            return $false
-        }
-        $Proc = Start-Process -FilePath $bw.Path -ArgumentList $Arguments -NoNewWindow -PassThru -ErrorAction Stop
+        try {
+            $bw = Get-Command bw
+            if (!$bw) {
+                Write-Error 'Bitwarden CLI is not installed'
+                return $false
+            }
+            $Proc = Start-Process -FilePath $bw.Path -ArgumentList $Arguments -NoNewWindow -PassThru -ErrorAction Stop
         
-        $OldProgPref = $global:ProgressPreference
-        $global:ProgressPreference = 'SilentlyContinue'
+            $OldProgPref = $global:ProgressPreference
+            $global:ProgressPreference = 'SilentlyContinue'
         
-        do {
-            $VaultRest = Test-NetConnection -ComputerName $Hostname -Port $Port -InformationLevel Quiet -WarningAction SilentlyContinue
-            Start-Sleep -Seconds 1
-        } while (-not $VaultRest)
+            do {
+                $VaultRest = Test-NetConnection -ComputerName $Hostname -Port $Port -InformationLevel Quiet -WarningAction SilentlyContinue
+                Start-Sleep -Seconds 1
+            } while (-not $VaultRest)
 
-        $global:ProgressPreference = $OldProgPref
+            $global:ProgressPreference = $OldProgPref
 
-        $script:BwRestServer = [PSCustomObject]@{
-            PID      = $Proc.Id
-            Port     = $Port
-            Hostname = $Hostname
+            $script:BwRestServer = [PSCustomObject]@{
+                PID      = $Proc.Id
+                Port     = $Port
+                Hostname = $Hostname
+            }
+            $script:BwRestServer
         }
-        $script:BwRestServer
-    }
-    catch {
-        Write-Error 'Could not start REST server'
+        catch {
+            Write-Error 'Could not start REST server'
+        }
     }
 }

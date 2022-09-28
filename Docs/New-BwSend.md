@@ -5,26 +5,26 @@ online version: https://bitwarden.com/help/vault-management-api/
 schema: 2.0.0
 ---
 
-# Get-BwVaultItem
+# New-BwSend
 
 ## SYNOPSIS
-Gets Bitwarden Vault Items
+Creates Bitwarden Send
 
 ## SYNTAX
 
-### List (Default)
+### SendParams (Default)
 ```
-Get-BwVaultItem [-OrganizationId <Object>] [-CollectionId <Object>] [-FolderId <Object>] [-Search <Object>]
- [-Url <Object>] [<CommonParameters>]
+New-BwSend -Name <Object> [-Notes <Object>] [-SendPass <Object>] -Text <Object> [-Days <Int32>]
+ [-MaxAccessCount <Int32>] [-HideText] [-HideEmail] [<CommonParameters>]
 ```
 
-### Single
+### FullObject
 ```
-Get-BwVaultItem -Id <Object> [-AsCredential] [<CommonParameters>]
+New-BwSend -Send <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Calls /list/object/items or /object/item/{id} to retrieve vault items
+Calls POST /object/send to create a new send
 
 ## EXAMPLES
 
@@ -37,12 +37,12 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Id
-Item guid
+### -Name
+{{ Fill Name Description }}
 
 ```yaml
 Type: Object
-Parameter Sets: Single
+Parameter Sets: SendParams
 Aliases:
 
 Required: True
@@ -52,12 +52,87 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -AsCredential
-Returns login property as credential object
+### -Notes
+{{ Fill Notes Description }}
+
+```yaml
+Type: Object
+Parameter Sets: SendParams
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SendPass
+{{ Fill SendPass Description }}
+
+```yaml
+Type: Object
+Parameter Sets: SendParams
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Text
+{{ Fill Text Description }}
+
+```yaml
+Type: Object
+Parameter Sets: SendParams
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Days
+{{ Fill Days Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: SendParams
+Aliases:
+
+Required: False
+Position: Named
+Default value: 7
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MaxAccessCount
+{{ Fill MaxAccessCount Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: SendParams
+Aliases:
+
+Required: False
+Position: Named
+Default value: 3
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -HideText
+{{ Fill HideText Description }}
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Single
+Parameter Sets: SendParams
 Aliases:
 
 Required: False
@@ -67,78 +142,33 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -OrganizationId
-Organization Guid
+### -HideEmail
+{{ Fill HideEmail Description }}
 
 ```yaml
-Type: Object
-Parameter Sets: List
+Type: SwitchParameter
+Parameter Sets: SendParams
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CollectionId
-Collection Guid
+### -Send
+{{ Fill Send Description }}
 
 ```yaml
 Type: Object
-Parameter Sets: List
+Parameter Sets: FullObject
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -FolderId
-Folder Guid
-
-```yaml
-Type: Object
-Parameter Sets: List
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Search
-Search terms
-
-```yaml
-Type: Object
-Parameter Sets: List
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Url
-Search for matching Urls
-
-```yaml
-Type: Object
-Parameter Sets: List
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 

@@ -5,19 +5,19 @@ online version: https://bitwarden.com/help/vault-management-api/
 schema: 2.0.0
 ---
 
-# Get-BwPublicMembers
+# Get-BwVaultAttachment
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Gets Bitwarden Vault Attachments
 
 ## SYNTAX
 
 ```
-Get-BwPublicMembers [[-Id] <Object>] [<CommonParameters>]
+Get-BwVaultAttachment [-Id] <Object> [-ItemId] <Object> [[-FilePath] <Object>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Calls Get /object/attachment/{id} to download attachments
 
 ## EXAMPLES
 
@@ -31,7 +31,37 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Id
-{{ Fill Id Description }}
+Attachment id
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ItemId
+Item Guid
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FilePath
+Path to save file
 
 ```yaml
 Type: Object
@@ -39,7 +69,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -50,11 +80,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS
+
+[https://bitwarden.com/help/vault-management-api/](https://bitwarden.com/help/vault-management-api/)
+

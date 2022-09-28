@@ -1,6 +1,6 @@
 ---
-external help file: Bitwarden-help.xml
-Module Name: Bitwarden
+external help file: BitwardenPS-help.xml
+Module Name: BitwardenPS
 online version: https://bitwarden.com/help/cli/#serve
 schema: 2.0.0
 ---

@@ -1,4 +1,4 @@
-# Bitwarden
+# BitwardenPS Module
 
 This module interacts with the Bitwarden Public API and the Vault API.
 

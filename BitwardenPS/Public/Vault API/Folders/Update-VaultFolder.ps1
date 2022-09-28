@@ -1,4 +1,4 @@
-function Update-VaultItem {
+function Update-VaultFolder {
     <#
     .SYNOPSIS
     Updates Bitwarden Vault Folder
@@ -18,33 +18,35 @@ function Update-VaultItem {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id,
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Name
     )
 
-    $Body = @{
-        name = $Name
-    } | ConvertTo-Json
+    Process {
+        $Body = @{
+            name = $Name
+        } | ConvertTo-Json
 
-    $Endpoint = 'object/folder/{0}' -f $Id
+        $Endpoint = 'object/folder/{0}' -f $Id
 
-    $VaultApi = @{
-        Method   = 'Put'
-        Endpoint = $Endpoint
-        Body     = $Body
-    }
-    
-    $Request = Invoke-VaultApi @VaultApi
-
-    if ($Request.success) {
-        if ($Request.data) {
-            $Request.data
+        $VaultApi = @{
+            Method   = 'Put'
+            Endpoint = $Endpoint
+            Body     = $Body
         }
-    }
-    else {
-        Write-Host $Request.message
-        $Request.success
+    
+        $Request = Invoke-VaultApi @VaultApi
+
+        if ($Request.success) {
+            if ($Request.data) {
+                $Request.data
+            }
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
+        }
     }
 }

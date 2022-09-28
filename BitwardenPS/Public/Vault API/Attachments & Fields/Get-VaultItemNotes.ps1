@@ -15,16 +15,17 @@ function Get-VaultItemNotes {
     #>
     [cmdletbinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
     )
-
-    $Request = Invoke-VaultApi -Endpoint ('object/notes/{0}' -f $Id)
-    if ($Request.success) {
-        $Request.data.data
+    Process {
+        $Request = Invoke-VaultApi -Endpoint ('object/notes/{0}' -f $Id)
+        if ($Request.success) {
+            $Request.data.data
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
+        } 
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    } 
 }

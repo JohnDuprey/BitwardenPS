@@ -15,16 +15,17 @@ function Remove-VaultItem {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
     )
-    
-    $Endpoint = 'object/item/{0}' -f $Id
+    Process {
+        $Endpoint = 'object/item/{0}' -f $Id
 
-    $VaultApi = @{
-        Method   = 'Delete'
-        Endpoint = $Endpoint
-    }
+        $VaultApi = @{
+            Method   = 'Delete'
+            Endpoint = $Endpoint
+        }
     
-    Invoke-VaultApi @VaultApi
+        Invoke-VaultApi @VaultApi
+    }
 }

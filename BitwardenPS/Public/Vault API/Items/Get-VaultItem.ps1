@@ -27,6 +27,9 @@ function Get-VaultItem {
     .PARAMETER Url
     Search for matching Urls
     
+    .PARAMETER Trash
+    Show deleted items
+    
     .LINK
     https://bitwarden.com/help/vault-management-api/
 

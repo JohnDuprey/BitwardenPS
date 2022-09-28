@@ -12,7 +12,7 @@
     RootModule           = 'BitwardenPS.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '1.0.0.0'
+    ModuleVersion        = '1.0.1.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -69,7 +69,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport    = @('Get-PublicCollections','Connect-PublicApi','Get-PublicEvents','Get-PublicGroupMemberIds','Get-PublicGroups','Get-PublicMemberGroupIds','Get-PublicMembers','Send-PublicMemberInvite','Get-VaultAttachment','Get-VaultItemNotes','Get-VaultItemPassword','Get-VaultItemPwExposed','Get-VaultItemTotp','Get-VaultItemUri','Get-VaultItemUsername','New-VaultAttachment','Remove-VaultAttachment','Confirm-VaultOrgMember','Get-VaultCollections','Get-VaultOrgCollection','Get-VaultOrgMembers','Get-VaultOrgs','Move-VaultItemToCollection','New-VaultOrgCollection','Remove-VaultOrgCollection','Update-VaultOrgCollection','Get-VaultFolder','Remove-VaultFolder','Update-VaultFolder','Get-VaultItem','New-VaultItem','Remove-VaultItem','Restore-VaultItem','Update-VaultItem','Lock-Vault','Unlock-Vault','Get-VaultStatus','Get-VaultTemplate','New-Password','Sync-Vault','Start-RestServer','Stop-RestServer','Get-Send','New-Send','Remove-Send','Update-Send')
+    FunctionsToExport    = @('Get-PublicCollections','Connect-PublicApi','Get-PublicEvents','Get-PublicGroupMemberIds','Get-PublicGroups','Get-PublicMemberGroupIds','Get-PublicMembers','Send-PublicMemberInvite','Get-VaultAttachment','Get-VaultItemNotes','Get-VaultItemPassword','Get-VaultItemPwExposed','Get-VaultItemTotp','Get-VaultItemUri','Get-VaultItemUsername','New-VaultAttachment','Remove-VaultAttachment','Confirm-VaultOrgMember','Get-VaultCollections','Get-VaultOrgCollection','Get-VaultOrgMembers','Get-VaultOrgs','Move-VaultItemToCollection','New-VaultOrgCollection','Remove-VaultOrgCollection','Update-VaultOrgCollection','Get-VaultFolder','New-VaultFolder','Remove-VaultFolder','Update-VaultFolder','Get-VaultItem','New-VaultItem','Remove-VaultItem','Restore-VaultItem','Update-VaultItem','Lock-Vault','Unlock-Vault','Get-VaultStatus','Get-VaultTemplate','New-Password','Sync-Vault','Start-RestServer','Stop-RestServer','Get-Send','New-Send','Remove-Send','Update-Send')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     #CmdletsToExport = '*'

@@ -57,9 +57,7 @@ function Invoke-VaultApi {
         $OutFile = ''
     )
 
-    if (!$script:BwRestServer.Hostname) {
-        Start-BwRestServer | Out-Null
-    }
+    Start-BwRestServer | Out-Null
 
     $Uri = 'http://{0}:{1}/{2}' -f $script:BwRestServer.Hostname, $script:BwRestServer.Port, $Endpoint
 
@@ -95,7 +93,7 @@ function Invoke-VaultApi {
         Invoke-RestMethod @RestMethod -SkipHttpErrorCheck
     }
 }
-#EndRegion '.\Private\Invoke\Invoke-VaultApi.ps1' 52
+#EndRegion '.\Private\Invoke\Invoke-VaultApi.ps1' 50
 #Region '.\Private\Invoke\Invoke-VaultCli.ps1' 0
 function Invoke-VaultCli {
     <#
@@ -446,20 +444,21 @@ function Get-VaultItemNotes {
     #>
     [cmdletbinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
     )
-
-    $Request = Invoke-VaultApi -Endpoint ('object/notes/{0}' -f $Id)
-    if ($Request.success) {
-        $Request.data.data
+    Process {
+        $Request = Invoke-VaultApi -Endpoint ('object/notes/{0}' -f $Id)
+        if ($Request.success) {
+            $Request.data.data
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
+        } 
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    } 
 }
-#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemNotes.ps1' 31
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemNotes.ps1' 32
 #Region '.\Public\Vault API\Attachments & Fields\Get-VaultItemPassword.ps1' 0
 function Get-VaultItemPassword {
     <#
@@ -478,20 +477,21 @@ function Get-VaultItemPassword {
     #>
     [cmdletbinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
     )
-
-    $Request = Invoke-VaultApi -Endpoint ('object/password/{0}' -f $Id)
-    if ($Request.success) {
-        $Request.data.data
+    Process {
+        $Request = Invoke-VaultApi -Endpoint ('object/password/{0}' -f $Id)
+        if ($Request.success) {
+            $Request.data.data
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
+        } 
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    } 
 }
-#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemPassword.ps1' 31
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemPassword.ps1' 32
 #Region '.\Public\Vault API\Attachments & Fields\Get-VaultItemPwExposed.ps1' 0
 function Get-VaultItemPwExposed {
     <#
@@ -510,20 +510,22 @@ function Get-VaultItemPwExposed {
     #>
     [cmdletbinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
     )
 
-    $Request = Invoke-VaultApi -Endpoint ('object/exposed/{0}' -f $Id)
-    if ($Request.success) {
-        $Request.data.data
+    Process {
+        $Request = Invoke-VaultApi -Endpoint ('object/exposed/{0}' -f $Id)
+        if ($Request.success) {
+            $Request.data.data
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
+        } 
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    } 
 }
-#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemPwExposed.ps1' 31
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemPwExposed.ps1' 33
 #Region '.\Public\Vault API\Attachments & Fields\Get-VaultItemTotp.ps1' 0
 function Get-VaultItemTotp {
     <#
@@ -542,20 +544,21 @@ function Get-VaultItemTotp {
     #>
     [cmdletbinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
     )
-
-    $Request = Invoke-VaultApi -Endpoint ('object/totp/{0}' -f $Id)
-    if ($Request.success) {
-        $Request.data.data
+    Process {
+        $Request = Invoke-VaultApi -Endpoint ('object/totp/{0}' -f $Id)
+        if ($Request.success) {
+            $Request.data.data
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
+        } 
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    } 
 }
-#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemTotp.ps1' 31
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemTotp.ps1' 32
 #Region '.\Public\Vault API\Attachments & Fields\Get-VaultItemUri.ps1' 0
 function Get-VaultItemUri {
     <#
@@ -574,20 +577,22 @@ function Get-VaultItemUri {
     #>
     [cmdletbinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
     )
 
-    $Request = Invoke-VaultApi -Endpoint ('object/uri/{0}' -f $Id)
-    if ($Request.success) {
-        $Request.data.data
+    Process {
+        $Request = Invoke-VaultApi -Endpoint ('object/uri/{0}' -f $Id)
+        if ($Request.success) {
+            $Request.data.data
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
+        } 
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    } 
 }
-#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemUri.ps1' 31
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemUri.ps1' 33
 #Region '.\Public\Vault API\Attachments & Fields\Get-VaultItemUsername.ps1' 0
 function Get-VaultItemUsername {
     <#
@@ -606,20 +611,22 @@ function Get-VaultItemUsername {
     #>
     [cmdletbinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
     )
 
-    $Request = Invoke-VaultApi -Endpoint ('object/username/{0}' -f $Id)
-    if ($Request.success) {
-        $Request.data.data
+    Process {
+        $Request = Invoke-VaultApi -Endpoint ('object/username/{0}' -f $Id)
+        if ($Request.success) {
+            $Request.data.data
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
+        } 
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    } 
 }
-#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemUsername.ps1' 31
+#EndRegion '.\Public\Vault API\Attachments & Fields\Get-VaultItemUsername.ps1' 33
 #Region '.\Public\Vault API\Attachments & Fields\New-VaultAttachment.ps1' 0
 function New-VaultAttachment {
     <#
@@ -755,19 +762,21 @@ function Confirm-VaultOrgMember {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id,
         [Parameter(Mandatory = $true)]
         $OrganizationId
     )
 
-    $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-    $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
+    Process {
+        $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+        $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
 
-    $Endpoint = 'confirm/org-member/{0}' -f $Id
-    Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
+        $Endpoint = 'confirm/org-member/{0}' -f $Id
+        Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
+    }
 }
-#EndRegion '.\Public\Vault API\Collections & Organizations\Confirm-VaultOrgMember.ps1' 33
+#EndRegion '.\Public\Vault API\Collections & Organizations\Confirm-VaultOrgMember.ps1' 35
 #Region '.\Public\Vault API\Collections & Organizations\Get-VaultCollections.ps1' 0
 function Get-VaultCollections {
     <#
@@ -1077,22 +1086,24 @@ function Remove-VaultOrgCollection {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id,
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $OrganizationId
     )
     
-    $Endpoint = 'object/org-collection/{0}' -f $Id
+    Process {
+        $Endpoint = 'object/org-collection/{0}' -f $Id
 
-    $VaultApi = @{
-        Method   = 'Delete'
-        Endpoint = $Endpoint
-    }
+        $VaultApi = @{
+            Method   = 'Delete'
+            Endpoint = $Endpoint
+        }
     
-    Invoke-VaultApi @VaultApi
+        Invoke-VaultApi @VaultApi
+    }
 }
-#EndRegion '.\Public\Vault API\Collections & Organizations\Remove-VaultOrgCollection.ps1' 33
+#EndRegion '.\Public\Vault API\Collections & Organizations\Remove-VaultOrgCollection.ps1' 35
 #Region '.\Public\Vault API\Collections & Organizations\Update-VaultOrgCollection.ps1' 0
 function Update-VaultOrgCollection {
     <#
@@ -1118,52 +1129,54 @@ function Update-VaultOrgCollection {
         $Id,
 
         [Parameter(ParameterSetName = 'BodyUpdate')]
-        [Parameter(ValueFromPipeline, ParameterSetName = 'FullObject')]
+        [Parameter(ValueFromPipeline = $true, ParameterSetName = 'FullObject')]
         $OrgCollection
     )
 
-    $OrgCollectonValid = $false
+    Process {
+        $OrgCollectonValid = $false
 
-    if ($OrgCollection.GetType().Name -eq 'pscustomobject') {
-        $Body = $OrgCollection | ConvertTo-Json -Depth 10
-        if ($OrgCollection.id) { $Id = $Item.id }
-        $OrgCollectonValid = $true
-    }
-    elseif (Test-Json -Json $OrgCollection) {
-        $Object = $OrgCollection | ConvertFrom-Json
-        if ($Object.id) {
-            $Id = $Object.id
+        if ($OrgCollection.GetType().Name -eq 'pscustomobject') {
+            $Body = $OrgCollection | ConvertTo-Json -Depth 10
+            if ($OrgCollection.id) { $Id = $Item.id }
+            $OrgCollectonValid = $true
         }
-        $Body = $OrgCollection
-        $OrgCollectonValid = $true
-    }
-    
-    if (-not $Id -or -not $OrgCollectonValid) { 
-        Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string and and id property must be specified"
-        return
-    }
-
-    $Endpoint = 'object/org-collection/{0}' -f $Id
-
-    $VaultApi = @{
-        Method   = 'Put'
-        Endpoint = $Endpoint
-        Body     = $Body
-    }
-    
-    $Request = Invoke-VaultApi @VaultApi
-
-    if ($Request.success) {
-        if ($Request.data) {
-            $Request.data
+        elseif (Test-Json -Json $OrgCollection) {
+            $Object = $OrgCollection | ConvertFrom-Json
+            if ($Object.id) {
+                $Id = $Object.id
+            }
+            $Body = $OrgCollection
+            $OrgCollectonValid = $true
         }
-    }
-    else {
-        Write-Host $Request.message
-        $Request.success
+    
+        if (-not $Id -or -not $OrgCollectonValid) { 
+            Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string and and id property must be specified"
+            return
+        }
+
+        $Endpoint = 'object/org-collection/{0}' -f $Id
+
+        $VaultApi = @{
+            Method   = 'Put'
+            Endpoint = $Endpoint
+            Body     = $Body
+        }
+    
+        $Request = Invoke-VaultApi @VaultApi
+
+        if ($Request.success) {
+            if ($Request.data) {
+                $Request.data
+            }
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
+        }
     }
 }
-#EndRegion '.\Public\Vault API\Collections & Organizations\Update-VaultOrgCollection.ps1' 70
+#EndRegion '.\Public\Vault API\Collections & Organizations\Update-VaultOrgCollection.ps1' 72
 #Region '.\Public\Vault API\Folders\Get-VaultFolder.ps1' 0
 function Get-VaultFolder {
     <#
@@ -1229,6 +1242,63 @@ function Get-VaultFolder {
     }
 }
 #EndRegion '.\Public\Vault API\Folders\Get-VaultFolder.ps1' 64
+#Region '.\Public\Vault API\Folders\New-VaultFolder.ps1' 0
+function New-VaultFolder {
+    <#
+    .SYNOPSIS
+    Creates Bitwarden Folder
+    
+    .DESCRIPTION
+    Calls POST /object/folder to create new folders
+    
+    .PARAMETER Name
+    Name of the folder
+
+    .LINK
+    https://bitwarden.com/help/vault-management-api/
+
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline = $true, Mandatory = $true)]
+        $Folder
+    )
+
+    $FolderValid = $false
+
+    if ($Folder.GetType().Name -eq 'pscustomobject') {
+        $Body = $Folder | ConvertTo-Json -Depth 10
+        $FolderValid = $true
+    }
+    elseif (Test-Json -Json $Folder) {
+        $Body = $Folder
+        $FolderValid = $true
+    }
+    
+    if (-not $FolderValid) { 
+        Write-Error "Input validation failed for 'Folder', valid types are pscustomobject or JSON string"
+        return
+    }
+    
+    $VaultApi = @{
+        Method   = 'POST'
+        Endpoint = 'object/folder'
+        Body     = $Body
+    }
+    
+    $Request = Invoke-VaultApi @VaultApi
+
+    if ($Request.success) {
+        if ($Request.data) {
+            $Request.data
+        }
+    }
+    else {
+        Write-Host $Request.message
+        $Request.success
+    }
+}
+#EndRegion '.\Public\Vault API\Folders\New-VaultFolder.ps1' 56
 #Region '.\Public\Vault API\Folders\Remove-VaultFolder.ps1' 0
 function Remove-VaultFolder {
     <#
@@ -1247,22 +1317,23 @@ function Remove-VaultFolder {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
     )
     
-    $Endpoint = 'object/folder/{0}' -f $Id
+    Process {
+        $Endpoint = 'object/folder/{0}' -f $Id
 
-    $VaultApi = @{
-        Method   = 'Delete'
-        Endpoint = $Endpoint
+        $VaultApi = @{
+            Method   = 'Delete'
+            Endpoint = $Endpoint
+        }
+        Invoke-VaultApi @VaultApi
     }
-    
-    Invoke-VaultApi @VaultApi
 }
-#EndRegion '.\Public\Vault API\Folders\Remove-VaultFolder.ps1' 31
+#EndRegion '.\Public\Vault API\Folders\Remove-VaultFolder.ps1' 32
 #Region '.\Public\Vault API\Folders\Update-VaultFolder.ps1' 0
-function Update-VaultItem {
+function Update-VaultFolder {
     <#
     .SYNOPSIS
     Updates Bitwarden Vault Folder
@@ -1282,37 +1353,39 @@ function Update-VaultItem {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id,
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Name
     )
 
-    $Body = @{
-        name = $Name
-    } | ConvertTo-Json
+    Process {
+        $Body = @{
+            name = $Name
+        } | ConvertTo-Json
 
-    $Endpoint = 'object/folder/{0}' -f $Id
+        $Endpoint = 'object/folder/{0}' -f $Id
 
-    $VaultApi = @{
-        Method   = 'Put'
-        Endpoint = $Endpoint
-        Body     = $Body
-    }
+        $VaultApi = @{
+            Method   = 'Put'
+            Endpoint = $Endpoint
+            Body     = $Body
+        }
     
-    $Request = Invoke-VaultApi @VaultApi
+        $Request = Invoke-VaultApi @VaultApi
 
-    if ($Request.success) {
-        if ($Request.data) {
-            $Request.data
+        if ($Request.success) {
+            if ($Request.data) {
+                $Request.data
+            }
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
         }
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    }
 }
-#EndRegion '.\Public\Vault API\Folders\Update-VaultFolder.ps1' 51
+#EndRegion '.\Public\Vault API\Folders\Update-VaultFolder.ps1' 53
 #Region '.\Public\Vault API\Items\Get-VaultItem.ps1' 0
 function Get-VaultItem {
     <#
@@ -1343,6 +1416,9 @@ function Get-VaultItem {
     .PARAMETER Url
     Search for matching Urls
     
+    .PARAMETER Trash
+    Show deleted items
+    
     .LINK
     https://bitwarden.com/help/vault-management-api/
 
@@ -1363,7 +1439,9 @@ function Get-VaultItem {
         [Parameter(ParameterSetName = 'List')]
         $Search = '',
         [Parameter(ParameterSetName = 'List')]
-        $Url = ''
+        $Url = '',
+        [Parameter(ParameterSetName = 'List')]
+        [switch]$Trash
     )
 
     switch ($PSCmdlet.ParameterSetName) {
@@ -1385,6 +1463,9 @@ function Get-VaultItem {
             }
             if ($Url -ne '') {
                 $QueryParams.Add('url', $Url) | Out-Null
+            }
+            if ($Trash) {
+                $QueryParams.Add('trash', $true) | Out-Null
             }
 
             $VaultApi = @{
@@ -1422,7 +1503,7 @@ function Get-VaultItem {
         $Request.success
     }
 }
-#EndRegion '.\Public\Vault API\Items\Get-VaultItem.ps1' 109
+#EndRegion '.\Public\Vault API\Items\Get-VaultItem.ps1' 117
 #Region '.\Public\Vault API\Items\New-VaultItem.ps1' 0
 function New-VaultItem {
     <#
@@ -1441,45 +1522,47 @@ function New-VaultItem {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(ValueFromPipeline, Mandatory = $true)]
+        [Parameter(ValueFromPipeline = $true, Mandatory = $true)]
         $Item
     )
 
-    $ItemValid = $false
+    Process {
+        $ItemValid = $false
 
-    if ($Item.GetType().Name -eq 'pscustomobject') {
-        $Body = $Item | ConvertTo-Json -Depth 10
-        $ItemValid = $true
-    }
-    elseif (Test-Json -Json $Item) {
-        $Body = $Item
-        $ItemValid = $true
-    }
+        if ($Item.GetType().Name -eq 'pscustomobject') {
+            $Body = $Item | ConvertTo-Json -Depth 10
+            $ItemValid = $true
+        }
+        elseif (Test-Json -Json $Item) {
+            $Body = $Item
+            $ItemValid = $true
+        }
     
-    if (-not $ItemValid) { 
-        Write-Error "Input validation failed for 'Item', valid types are pscustomobject or JSON string and and id property must be specified"
-        return
-    }
+        if (-not $ItemValid) { 
+            Write-Error "Input validation failed for 'Item', valid types are pscustomobject or JSON string and and id property must be specified"
+            return
+        }
     
-    $VaultApi = @{
-        Method   = 'POST'
-        Endpoint = 'object/item'
-        Body     = $Body
-    }
+        $VaultApi = @{
+            Method   = 'POST'
+            Endpoint = 'object/item'
+            Body     = $Body
+        }
     
-    $Request = Invoke-VaultApi @VaultApi
+        $Request = Invoke-VaultApi @VaultApi
 
-    if ($Request.success) {
-        if ($Request.data) {
-            $Request.data
+        if ($Request.success) {
+            if ($Request.data) {
+                $Request.data
+            }
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
         }
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    }
 }
-#EndRegion '.\Public\Vault API\Items\New-VaultItem.ps1' 56
+#EndRegion '.\Public\Vault API\Items\New-VaultItem.ps1' 58
 #Region '.\Public\Vault API\Items\Remove-VaultItem.ps1' 0
 function Remove-VaultItem {
     <#
@@ -1498,20 +1581,21 @@ function Remove-VaultItem {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
     )
-    
-    $Endpoint = 'object/item/{0}' -f $Id
+    Process {
+        $Endpoint = 'object/item/{0}' -f $Id
 
-    $VaultApi = @{
-        Method   = 'Delete'
-        Endpoint = $Endpoint
-    }
+        $VaultApi = @{
+            Method   = 'Delete'
+            Endpoint = $Endpoint
+        }
     
-    Invoke-VaultApi @VaultApi
+        Invoke-VaultApi @VaultApi
+    }
 }
-#EndRegion '.\Public\Vault API\Items\Remove-VaultItem.ps1' 31
+#EndRegion '.\Public\Vault API\Items\Remove-VaultItem.ps1' 32
 #Region '.\Public\Vault API\Items\Restore-VaultItem.ps1' 0
 function Restore-VaultItem {
     <#
@@ -1530,21 +1614,23 @@ function Restore-VaultItem {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
     )
     
-    $Endpoint = 'restore/item/{0}' -f $Id
+    Process {
+        $Endpoint = 'restore/item/{0}' -f $Id
 
-    $VaultApi = @{
-        Method   = 'Post'
-        Endpoint = $Endpoint
-        Body     = $Body
-    }
+        $VaultApi = @{
+            Method   = 'Post'
+            Endpoint = $Endpoint
+            Body     = $Body
+        }
     
-    Invoke-VaultApi @VaultApi
+        Invoke-VaultApi @VaultApi
+    }
 }
-#EndRegion '.\Public\Vault API\Items\Restore-VaultItem.ps1' 32
+#EndRegion '.\Public\Vault API\Items\Restore-VaultItem.ps1' 34
 #Region '.\Public\Vault API\Items\Update-VaultItem.ps1' 0
 function Update-VaultItem {
     <#
@@ -1570,50 +1656,52 @@ function Update-VaultItem {
         $Id,
 
         [Parameter(ParameterSetName = 'BodyUpdate')]
-        [Parameter(ValueFromPipeline, ParameterSetName = 'FullObject')]
+        [Parameter(ValueFromPipeline = $true, ParameterSetName = 'FullObject')]
         $Item
     )
 
-    $ItemValid = $false
+    Process {
+        $ItemValid = $false
 
-    if ($Item.GetType().Name -eq 'pscustomobject') {
-        $Body = $Item | ConvertTo-Json -Depth 10
-        $Id = $Item.id
-        $ItemValid = $true
-    }
-    elseif (Test-Json -Json $Item) {
-        $Object = $Item | ConvertFrom-Json
-        $Id = $Object.id
-        $Body = $Item
-        $ItemValid = $true
-    }
+        if ($Item.GetType().Name -eq 'pscustomobject') {
+            $Body = $Item | ConvertTo-Json -Depth 10
+            $Id = $Item.id
+            $ItemValid = $true
+        }
+        elseif (Test-Json -Json $Item) {
+            $Object = $Item | ConvertFrom-Json
+            $Id = $Object.id
+            $Body = $Item
+            $ItemValid = $true
+        }
     
-    if (-not $Id -or -not $ItemValid) { 
-        Write-Error "Input validation failed for 'Item', valid types are pscustomobject or JSON string and and id property must be specified"
-        return
-    }
+        if (-not $Id -or -not $ItemValid) { 
+            Write-Error "Input validation failed for 'Item', valid types are pscustomobject or JSON string and and id property must be specified"
+            return
+        }
 
-    $Endpoint = 'object/item/{0}' -f $Id
+        $Endpoint = 'object/item/{0}' -f $Id
 
-    $VaultApi = @{
-        Method   = 'Put'
-        Endpoint = $Endpoint
-        Body     = $Body
-    }
+        $VaultApi = @{
+            Method   = 'Put'
+            Endpoint = $Endpoint
+            Body     = $Body
+        }
     
-    $Request = Invoke-VaultApi @VaultApi
+        $Request = Invoke-VaultApi @VaultApi
 
-    if ($Request.success) {
-        if ($Request.data) {
-            $Request.data
+        if ($Request.success) {
+            if ($Request.data) {
+                $Request.data
+            }
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
         }
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    }
 }
-#EndRegion '.\Public\Vault API\Items\Update-VaultItem.ps1' 68
+#EndRegion '.\Public\Vault API\Items\Update-VaultItem.ps1' 70
 #Region '.\Public\Vault API\Lock & Unlock\Lock-Vault.ps1' 0
 function Lock-Vault {
     <#
@@ -1789,46 +1877,48 @@ function Start-RestServer {
     )
 
     $RunningCli = Get-Process bw -ErrorAction SilentlyContinue
-    if ($RunningCli -and -not $script:BwRestServer) {
-        $RunningCli | Stop-Process
+    if ($RunningCli.Id -ne $script:BwRestServer.PID) {
+        Stop-RestServer
     }
 
-    $Arguments = @(
-        'serve'
-        "--port $Port"
-        "--hostname $Hostname"    
-    )
+    if (-not $script:BwRestServer) {
+        $Arguments = @(
+            'serve'
+            "--port $Port"
+            "--hostname $Hostname"    
+        )
 
-    try {
-        $bw = Get-Command bw
-        if (!$bw) {
-            Write-Error 'Bitwarden CLI is not installed'
-            return $false
-        }
-        $Proc = Start-Process -FilePath $bw.Path -ArgumentList $Arguments -NoNewWindow -PassThru -ErrorAction Stop
+        try {
+            $bw = Get-Command bw
+            if (!$bw) {
+                Write-Error 'Bitwarden CLI is not installed'
+                return $false
+            }
+            $Proc = Start-Process -FilePath $bw.Path -ArgumentList $Arguments -NoNewWindow -PassThru -ErrorAction Stop
         
-        $OldProgPref = $global:ProgressPreference
-        $global:ProgressPreference = 'SilentlyContinue'
+            $OldProgPref = $global:ProgressPreference
+            $global:ProgressPreference = 'SilentlyContinue'
         
-        do {
-            $VaultRest = Test-NetConnection -ComputerName $Hostname -Port $Port -InformationLevel Quiet -WarningAction SilentlyContinue
-            Start-Sleep -Seconds 1
-        } while (-not $VaultRest)
+            do {
+                $VaultRest = Test-NetConnection -ComputerName $Hostname -Port $Port -InformationLevel Quiet -WarningAction SilentlyContinue
+                Start-Sleep -Seconds 1
+            } while (-not $VaultRest)
 
-        $global:ProgressPreference = $OldProgPref
+            $global:ProgressPreference = $OldProgPref
 
-        $script:BwRestServer = [PSCustomObject]@{
-            PID      = $Proc.Id
-            Port     = $Port
-            Hostname = $Hostname
+            $script:BwRestServer = [PSCustomObject]@{
+                PID      = $Proc.Id
+                Port     = $Port
+                Hostname = $Hostname
+            }
+            $script:BwRestServer
         }
-        $script:BwRestServer
-    }
-    catch {
-        Write-Error 'Could not start REST server'
+        catch {
+            Write-Error 'Could not start REST server'
+        }
     }
 }
-#EndRegion '.\Public\Vault API\REST\Start-RestServer.ps1' 65
+#EndRegion '.\Public\Vault API\REST\Start-RestServer.ps1' 67
 #Region '.\Public\Vault API\REST\Stop-RestServer.ps1' 0
 function Stop-RestServer {
     <#
@@ -1847,12 +1937,13 @@ function Stop-RestServer {
     
     $RunningCli = Get-Process bw -ErrorAction SilentlyContinue
     if ($RunningCli) {
-        Write-Host 'Stopping REST server'
+        Write-Verbose 'Stopping REST server'
         $RunningCli | Stop-Process
+        $script:BwRestServer = $null
     }
     
 }
-#EndRegion '.\Public\Vault API\REST\Stop-RestServer.ps1' 23
+#EndRegion '.\Public\Vault API\REST\Stop-RestServer.ps1' 24
 #Region '.\Public\Vault API\Send\Get-Send.ps1' 0
 function Get-Send {
     <#

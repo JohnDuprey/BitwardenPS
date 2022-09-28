@@ -15,18 +15,20 @@ function Remove-VaultOrgCollection {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id,
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $OrganizationId
     )
     
-    $Endpoint = 'object/org-collection/{0}' -f $Id
+    Process {
+        $Endpoint = 'object/org-collection/{0}' -f $Id
 
-    $VaultApi = @{
-        Method   = 'Delete'
-        Endpoint = $Endpoint
-    }
+        $VaultApi = @{
+            Method   = 'Delete'
+            Endpoint = $Endpoint
+        }
     
-    Invoke-VaultApi @VaultApi
+        Invoke-VaultApi @VaultApi
+    }
 }

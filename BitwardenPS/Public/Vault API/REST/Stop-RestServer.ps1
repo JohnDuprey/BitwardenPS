@@ -15,8 +15,9 @@ function Stop-RestServer {
     
     $RunningCli = Get-Process bw -ErrorAction SilentlyContinue
     if ($RunningCli) {
-        Write-Host 'Stopping REST server'
+        Write-Verbose 'Stopping REST server'
         $RunningCli | Stop-Process
+        $script:BwRestServer = $null
     }
     
 }

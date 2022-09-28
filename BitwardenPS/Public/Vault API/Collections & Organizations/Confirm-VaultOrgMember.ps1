@@ -18,15 +18,17 @@ function Confirm-VaultOrgMember {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id,
         [Parameter(Mandatory = $true)]
         $OrganizationId
     )
 
-    $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-    $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
+    Process {
+        $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+        $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
 
-    $Endpoint = 'confirm/org-member/{0}' -f $Id
-    Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
+        $Endpoint = 'confirm/org-member/{0}' -f $Id
+        Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
+    }
 }

@@ -22,46 +22,48 @@ function Update-VaultItem {
         $Id,
 
         [Parameter(ParameterSetName = 'BodyUpdate')]
-        [Parameter(ValueFromPipeline, ParameterSetName = 'FullObject')]
+        [Parameter(ValueFromPipeline = $true, ParameterSetName = 'FullObject')]
         $Item
     )
 
-    $ItemValid = $false
+    Process {
+        $ItemValid = $false
 
-    if ($Item.GetType().Name -eq 'pscustomobject') {
-        $Body = $Item | ConvertTo-Json -Depth 10
-        $Id = $Item.id
-        $ItemValid = $true
-    }
-    elseif (Test-Json -Json $Item) {
-        $Object = $Item | ConvertFrom-Json
-        $Id = $Object.id
-        $Body = $Item
-        $ItemValid = $true
-    }
-    
-    if (-not $Id -or -not $ItemValid) { 
-        Write-Error "Input validation failed for 'Item', valid types are pscustomobject or JSON string and and id property must be specified"
-        return
-    }
-
-    $Endpoint = 'object/item/{0}' -f $Id
-
-    $VaultApi = @{
-        Method   = 'Put'
-        Endpoint = $Endpoint
-        Body     = $Body
-    }
-    
-    $Request = Invoke-VaultApi @VaultApi
-
-    if ($Request.success) {
-        if ($Request.data) {
-            $Request.data
+        if ($Item.GetType().Name -eq 'pscustomobject') {
+            $Body = $Item | ConvertTo-Json -Depth 10
+            $Id = $Item.id
+            $ItemValid = $true
         }
-    }
-    else {
-        Write-Host $Request.message
-        $Request.success
+        elseif (Test-Json -Json $Item) {
+            $Object = $Item | ConvertFrom-Json
+            $Id = $Object.id
+            $Body = $Item
+            $ItemValid = $true
+        }
+    
+        if (-not $Id -or -not $ItemValid) { 
+            Write-Error "Input validation failed for 'Item', valid types are pscustomobject or JSON string and and id property must be specified"
+            return
+        }
+
+        $Endpoint = 'object/item/{0}' -f $Id
+
+        $VaultApi = @{
+            Method   = 'Put'
+            Endpoint = $Endpoint
+            Body     = $Body
+        }
+    
+        $Request = Invoke-VaultApi @VaultApi
+
+        if ($Request.success) {
+            if ($Request.data) {
+                $Request.data
+            }
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
+        }
     }
 }

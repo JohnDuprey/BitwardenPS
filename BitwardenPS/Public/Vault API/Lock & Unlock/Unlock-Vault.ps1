@@ -27,6 +27,6 @@ function Unlock-Vault {
     # Set session variable for cli commands
     [Environment]::SetEnvironmentVariable('BW_SESSION', $Request.data.raw)
 
-    Write-Host $Request.data.title
+    Write-Verbose $Request.data.title
     $Request.success
 }

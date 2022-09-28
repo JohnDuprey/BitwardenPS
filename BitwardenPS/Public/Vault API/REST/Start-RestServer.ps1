@@ -22,12 +22,15 @@ function Start-RestServer {
         $Hostname = 'localhost'
     )
 
-    $RunningCli = Get-Process bw -ErrorAction SilentlyContinue
-    if ($RunningCli.Id -ne $script:BwRestServer.PID) {
+    try {
+        $RunningCli = Get-Process -PID $script:BwRestServer.PID -ErrorAction SilentlyContinue
+    }
+    catch {
         Stop-RestServer
+        $RunningCli = $false
     }
 
-    if (-not $script:BwRestServer) {
+    if (-not $RunningCli) {
         $Arguments = @(
             'serve'
             "--port $Port"
@@ -40,6 +43,7 @@ function Start-RestServer {
                 Write-Error 'Bitwarden CLI is not installed'
                 return $false
             }
+            Write-Verbose 'Starting REST server'
             $Proc = Start-Process -FilePath $bw.Path -ArgumentList $Arguments -NoNewWindow -PassThru -ErrorAction Stop
         
             $OldProgPref = $global:ProgressPreference

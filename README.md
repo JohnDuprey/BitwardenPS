@@ -11,6 +11,12 @@ This module interacts with the Bitwarden Public API and the Vault API.
   - Install with Chocolatey: `choco install bitwarden-cli`
 - [Logged in account on cli](https://bitwarden.com/help/cli/#log-in)
 
+#### Module Installation ([PowerShell Gallery](https://www.powershellgallery.com/packages/BitwardenPS))
+
+```powershell
+Install-Module BitwardenPS
+```
+
 ### Reference
 
 - [Vault API](https://bitwarden.com/help/vault-management-api/)

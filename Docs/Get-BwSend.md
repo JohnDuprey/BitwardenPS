@@ -5,19 +5,25 @@ online version: https://bitwarden.com/help/vault-management-api/
 schema: 2.0.0
 ---
 
-# Get-BwPublicMembers
+# Get-BwSend
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Gets Bitwarden Sends
 
 ## SYNTAX
 
+### List (Default)
 ```
-Get-BwPublicMembers [[-Id] <Object>] [<CommonParameters>]
+Get-BwSend [-Search <Object>] [<CommonParameters>]
+```
+
+### Single
+```
+Get-BwSend -Id <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Calls /list/object/send or /object/send/{id}
 
 ## EXAMPLES
 
@@ -31,15 +37,30 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Id
-{{ Fill Id Description }}
+Guid of Collection
 
 ```yaml
 Type: Object
-Parameter Sets: (All)
+Parameter Sets: Single
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Search
+Search parameters
+
+```yaml
+Type: Object
+Parameter Sets: List
 Aliases:
 
 Required: False
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -50,11 +71,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS
+
+[https://bitwarden.com/help/vault-management-api/](https://bitwarden.com/help/vault-management-api/)
+

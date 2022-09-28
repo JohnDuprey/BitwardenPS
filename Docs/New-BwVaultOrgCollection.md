@@ -5,19 +5,19 @@ online version: https://bitwarden.com/help/vault-management-api/
 schema: 2.0.0
 ---
 
-# Get-BwPublicMembers
+# New-BwVaultOrgCollection
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates Bitwarden Vault Org Collections
 
 ## SYNTAX
 
 ```
-Get-BwPublicMembers [[-Id] <Object>] [<CommonParameters>]
+New-BwVaultOrgCollection [-OrgCollection] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Calls POST /object/org-collection to create new org collections
 
 ## EXAMPLES
 
@@ -30,18 +30,18 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Id
-{{ Fill Id Description }}
+### -OrgCollection
+Full item object in pscustoobject or json format
 
 ```yaml
 Type: Object
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: 0
+Required: True
+Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -50,11 +50,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS
+
+[https://bitwarden.com/help/vault-management-api/](https://bitwarden.com/help/vault-management-api/)
+

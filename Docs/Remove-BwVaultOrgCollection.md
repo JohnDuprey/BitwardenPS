@@ -5,19 +5,19 @@ online version: https://bitwarden.com/help/vault-management-api/
 schema: 2.0.0
 ---
 
-# Get-BwPublicMembers
+# Remove-BwVaultOrgCollection
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Deletes Bitwarden Org Collections Items
 
 ## SYNTAX
 
 ```
-Get-BwPublicMembers [[-Id] <Object>] [<CommonParameters>]
+Remove-BwVaultOrgCollection [-Id] <Object> [-OrganizationId] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Calls DELETE /object/org-collection/{id} to move organization collections to the trash, this does not delete the items inside
 
 ## EXAMPLES
 
@@ -31,15 +31,30 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Id
-{{ Fill Id Description }}
+OrgCollection guid
 
 ```yaml
 Type: Object
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: 0
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OrganizationId
+{{ Fill OrganizationId Description }}
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -50,11 +65,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS
+
+[https://bitwarden.com/help/vault-management-api/](https://bitwarden.com/help/vault-management-api/)
+

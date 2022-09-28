@@ -5,19 +5,25 @@ online version: https://bitwarden.com/help/vault-management-api/
 schema: 2.0.0
 ---
 
-# Get-BwPublicMembers
+# Update-BwSend
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates Bitwarden Send
 
 ## SYNTAX
 
+### BodyUpdate (Default)
 ```
-Get-BwPublicMembers [[-Id] <Object>] [<CommonParameters>]
+Update-BwSend -Id <Object> [-Send <Object>] [<CommonParameters>]
+```
+
+### FullObject
+```
+Update-BwSend [-Send <Object>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+PUT /object/send/{id}
 
 ## EXAMPLES
 
@@ -31,15 +37,42 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Id
-{{ Fill Id Description }}
+Send guid
 
 ```yaml
 Type: Object
-Parameter Sets: (All)
+Parameter Sets: BodyUpdate
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Send
+Full Send object in pscustoobject or json format
+
+```yaml
+Type: Object
+Parameter Sets: BodyUpdate
 Aliases:
 
 Required: False
-Position: 0
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+```yaml
+Type: Object
+Parameter Sets: FullObject
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -50,11 +83,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS
+
+[https://bitwarden.com/help/vault-management-api/](https://bitwarden.com/help/vault-management-api/)
+

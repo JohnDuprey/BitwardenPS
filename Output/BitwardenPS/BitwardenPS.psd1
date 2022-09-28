@@ -9,7 +9,7 @@
 @{
 
     # Script module or binary module file associated with this manifest.
-    RootModule           = 'Bitwarden.psm1'
+    RootModule           = 'BitwardenPS.psm1'
 
     # Version number of this module.
     ModuleVersion        = '1.0.0.0'
@@ -101,7 +101,7 @@
             # LicenseUri = ''
 
             # A URL to the main website for this project.
-            # ProjectUri = ''
+            ProjectUri = 'https://github.com/johnduprey/BitwardenPS'
 
             # A URL to an icon representing this module.
             # IconUri = ''

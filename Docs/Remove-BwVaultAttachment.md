@@ -5,19 +5,19 @@ online version: https://bitwarden.com/help/vault-management-api/
 schema: 2.0.0
 ---
 
-# Get-BwPublicMembers
+# Remove-BwVaultAttachment
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Deletes Bitwarden Vault Attachments
 
 ## SYNTAX
 
 ```
-Get-BwPublicMembers [[-Id] <Object>] [<CommonParameters>]
+Remove-BwVaultAttachment [-Id] <Object> [-ItemId] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Calls DELETE /object/item/{id} to move items to the trash
 
 ## EXAMPLES
 
@@ -31,15 +31,30 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Id
-{{ Fill Id Description }}
+Attachment id
 
 ```yaml
 Type: Object
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: 0
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ItemId
+Item Guid
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -50,11 +65,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS
+
+[https://bitwarden.com/help/vault-management-api/](https://bitwarden.com/help/vault-management-api/)
+

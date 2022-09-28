@@ -1,7 +1,7 @@
 ---
-external help file: Bitwarden-help.xml
-Module Name: Bitwarden
-online version:
+external help file: BitwardenPS-help.xml
+Module Name: BitwardenPS
+online version: https://bitwarden.com/help/vault-management-api/
 schema: 2.0.0
 ---
 

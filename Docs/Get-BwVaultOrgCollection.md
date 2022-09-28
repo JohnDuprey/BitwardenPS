@@ -5,19 +5,25 @@ online version: https://bitwarden.com/help/vault-management-api/
 schema: 2.0.0
 ---
 
-# Connect-BwPublicApi
+# Get-BwVaultOrgCollection
 
 ## SYNOPSIS
-Connects to Bitwarden Public API
+Gets Bitwarden Vault Org Collections
 
 ## SYNTAX
 
+### List (Default)
 ```
-Connect-BwPublicApi [[-Credentials] <PSCredential>] [[-Server] <Object>] [<CommonParameters>]
+Get-BwVaultOrgCollection -OrganizationId <Object> [-Search <Object>] [<CommonParameters>]
+```
+
+### Single
+```
+Get-BwVaultOrgCollection -Id <Object> -OrganizationId <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Generates OAuth token to interact with public API
+Calls /list/object/org-collections or /object/org-collection/{id}
 
 ## EXAMPLES
 
@@ -30,32 +36,47 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Credentials
-Client ID and Secret in PSCredential object
+### -Id
+Guid of Collection
 
 ```yaml
-Type: PSCredential
-Parameter Sets: (All)
+Type: Object
+Parameter Sets: Single
 Aliases:
 
-Required: False
-Position: 1
-Default value: (Get-Credential -Message 'Enter ClientID and Secret')
+Required: True
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Server
-Bitwarden identity server hostname, default identity.bitwarden.com
+### -OrganizationId
+Guid of Organization
 
 ```yaml
 Type: Object
 Parameter Sets: (All)
 Aliases:
 
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Search
+Search parameters
+
+```yaml
+Type: Object
+Parameter Sets: List
+Aliases:
+
 Required: False
-Position: 2
-Default value: Identity.bitwarden.com
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -70,3 +91,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://bitwarden.com/help/vault-management-api/](https://bitwarden.com/help/vault-management-api/)
+

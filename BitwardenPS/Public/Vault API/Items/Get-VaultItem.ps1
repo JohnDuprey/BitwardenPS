@@ -47,7 +47,9 @@ function Get-VaultItem {
         [Parameter(ParameterSetName = 'List')]
         $Search = '',
         [Parameter(ParameterSetName = 'List')]
-        $Url = ''
+        $Url = '',
+        [Parameter(ParameterSetName = 'List')]
+        [switch]$Trash
     )
 
     switch ($PSCmdlet.ParameterSetName) {
@@ -69,6 +71,9 @@ function Get-VaultItem {
             }
             if ($Url -ne '') {
                 $QueryParams.Add('url', $Url) | Out-Null
+            }
+            if ($Trash) {
+                $QueryParams.Add('trash', $true) | Out-Null
             }
 
             $VaultApi = @{

@@ -15,7 +15,7 @@ Gets Bitwarden Vault Items
 ### List (Default)
 ```
 Get-BwVaultItem [-OrganizationId <Object>] [-CollectionId <Object>] [-FolderId <Object>] [-Search <Object>]
- [-Url <Object>] [<CommonParameters>]
+ [-Url <Object>] [-Trash] [<CommonParameters>]
 ```
 
 ### Single
@@ -138,6 +138,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Trash
+Show deleted items
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: List
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

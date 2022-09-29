@@ -31,7 +31,7 @@ function Update-VaultOrgCollection {
 
         if ($OrgCollection.GetType().Name -eq 'pscustomobject') {
             $Body = $OrgCollection | ConvertTo-Json -Depth 10
-            if ($OrgCollection.id) { $Id = $Item.id }
+            if ($OrgCollection.id) { $Id = $OrgCollection.id }
             $OrgCollectonValid = $true
         }
         elseif (Test-Json -Json $OrgCollection) {

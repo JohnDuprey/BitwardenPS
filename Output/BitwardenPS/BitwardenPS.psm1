@@ -1128,6 +1128,8 @@ function Update-VaultOrgCollection {
     Param(
         [Parameter(ParameterSetName = 'BodyUpdate', Mandatory = $true)]
         $Id,
+        [Parameter(ParameterSetName = 'BodyUpdate', Mandatory = $true)]
+        $OrganizationId,
 
         [Parameter(ParameterSetName = 'BodyUpdate')]
         [Parameter(ValueFromPipeline = $true, ParameterSetName = 'FullObject')]
@@ -1138,8 +1140,9 @@ function Update-VaultOrgCollection {
         $OrgCollectonValid = $false
 
         if ($OrgCollection.GetType().Name -eq 'pscustomobject') {
+            if ($OrgCollection.id) { $Id = $OrgCollection.id }
+            if ($OrgCollection.organizationId) { $OrganizationId = $OrgCollection.organizationId }
             $Body = $OrgCollection | ConvertTo-Json -Depth 10
-            if ($OrgCollection.id) { $Id = $Item.id }
             $OrgCollectonValid = $true
         }
         elseif (Test-Json -Json $OrgCollection) {
@@ -1150,18 +1153,22 @@ function Update-VaultOrgCollection {
             $Body = $OrgCollection
             $OrgCollectonValid = $true
         }
-    
-        if (-not $Id -or -not $OrgCollectonValid) { 
-            Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string and and id property must be specified"
+
+        if (-not $Id -or -not $OrganizationId -or -not $OrgCollectonValid) { 
+            Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string. An OrganizationId and an Id property must be specified"
             return
         }
-
+        
+        Write-Verbose $Body
         $Endpoint = 'object/org-collection/{0}' -f $Id
+        $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+        $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
 
         $VaultApi = @{
-            Method   = 'Put'
-            Endpoint = $Endpoint
-            Body     = $Body
+            Method      = 'Put'
+            Endpoint    = $Endpoint
+            Body        = $Body
+            QueryParams = $QueryParams
         }
     
         $Request = Invoke-VaultApi @VaultApi
@@ -1177,7 +1184,7 @@ function Update-VaultOrgCollection {
         }
     }
 }
-#EndRegion '.\Public\Vault API\Collections & Organizations\Update-VaultOrgCollection.ps1' 72
+#EndRegion '.\Public\Vault API\Collections & Organizations\Update-VaultOrgCollection.ps1' 79
 #Region '.\Public\Vault API\Folders\Get-VaultFolder.ps1' 0
 function Get-VaultFolder {
     <#

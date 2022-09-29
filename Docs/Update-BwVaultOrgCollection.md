@@ -14,7 +14,8 @@ Updates Bitwarden Vault Items
 
 ### BodyUpdate (Default)
 ```
-Update-BwVaultOrgCollection -Id <Object> [-OrgCollection <Object>] [<CommonParameters>]
+Update-BwVaultOrgCollection -Id <Object> -OrganizationId <Object> [-OrgCollection <Object>]
+ [<CommonParameters>]
 ```
 
 ### FullObject
@@ -38,6 +39,21 @@ PS C:\> {{ Add example code here }}
 
 ### -Id
 Item guid
+
+```yaml
+Type: Object
+Parameter Sets: BodyUpdate
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OrganizationId
+{{ Fill OrganizationId Description }}
 
 ```yaml
 Type: Object

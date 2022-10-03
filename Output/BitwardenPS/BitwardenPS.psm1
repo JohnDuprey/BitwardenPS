@@ -1030,45 +1030,60 @@ function New-VaultOrgCollection {
     #>
     [CmdletBinding()]
     Param(
+        [Parameter(Mandatory = $true)]
+        $OrganizationId,
+
         [Parameter(ValueFromPipeline, Mandatory = $true)]
         $OrgCollection
     )
 
-    $OrgCollectionValid = $false
+    Process {
+        $OrgCollectonValid = $false
 
-    if ($OrgCollection.GetType().Name -eq 'pscustomobject') {
-        $Body = $OrgCollection | ConvertTo-Json -Depth 10
-        $OrgCollectionValid = $true
-    }
-    elseif (Test-Json -Json $OrgCollection) {
-        $Body = $OrgCollection
-        $OrgCollectionValid = $true
-    }
-    
-    if (-not $OrgCollectionValid) { 
-        Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string"
-        return
-    }
-    
-    $VaultApi = @{
-        Method   = 'POST'
-        Endpoint = 'object/org-collection'
-        Body     = $Body
-    }
-    
-    $Request = Invoke-VaultApi @VaultApi
+        if ($OrgCollection.GetType().Name -eq 'pscustomobject') {
+            if ($OrgCollection.id) { $Id = $OrgCollection.id }
+            if ($OrgCollection.organizationId) { $OrganizationId = $OrgCollection.organizationId }
+            $Body = $OrgCollection | ConvertTo-Json -Depth 10
+            $OrgCollectonValid = $true
+        }
+        elseif (Test-Json -Json $OrgCollection) {
+            $Object = $OrgCollection | ConvertFrom-Json
+            if ($Object.id) {
+                $Id = $Object.id
+            }
+            $Body = $OrgCollection
+            $OrgCollectonValid = $true
+        }
 
-    if ($Request.success) {
-        if ($Request.data) {
-            $Request.data
+        if (-not $Id -or -not $OrganizationId -or -not $OrgCollectonValid) { 
+            Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string. An OrganizationId and an Id property must be specified"
+            return
+        }
+
+        $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+        $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
+    
+        $VaultApi = @{
+            Method      = 'POST'
+            Endpoint    = 'object/org-collection'
+            Body        = $Body
+            QueryParams = $QueryParams
+        }
+    
+        $Request = Invoke-VaultApi @VaultApi
+
+        if ($Request.success) {
+            if ($Request.data) {
+                $Request.data
+            }
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
         }
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    }
 }
-#EndRegion '.\Public\Vault API\Collections & Organizations\New-VaultOrgCollection.ps1' 56
+#EndRegion '.\Public\Vault API\Collections & Organizations\New-VaultOrgCollection.ps1' 71
 #Region '.\Public\Vault API\Collections & Organizations\Remove-VaultOrgCollection.ps1' 0
 function Remove-VaultOrgCollection {
     <#

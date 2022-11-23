@@ -57,9 +57,9 @@ function Invoke-VaultApi {
         $OutFile = ''
     )
 
-    Start-BwRestServer
+    Start-BwRestServer | Out-Null
 
-    Write-Verbose ($script:BwRestServer | ConvertTo-Json)
+    #Write-Verbose ($script:BwRestServer | ConvertTo-Json)
     $Uri = 'http://{0}:{1}/{2}' -f $script:BwRestServer.Hostname, $script:BwRestServer.Port, $Endpoint
 
     if ($QueryParams -ne '') {
@@ -1022,7 +1022,7 @@ function New-VaultOrgCollection {
     Calls POST /object/org-collection to create new org collections
     
     .PARAMETER OrgCollection
-    Full item object in pscustoobject or json format
+    Full item object in PSCustomObject or json format
 
     .LINK
     https://bitwarden.com/help/vault-management-api/
@@ -1041,21 +1041,20 @@ function New-VaultOrgCollection {
         $OrgCollectonValid = $false
 
         if ($OrgCollection.GetType().Name -eq 'pscustomobject') {
-            if ($OrgCollection.id) { $Id = $OrgCollection.id }
             if ($OrgCollection.organizationId) { $OrganizationId = $OrgCollection.organizationId }
             $Body = $OrgCollection | ConvertTo-Json -Depth 10
             $OrgCollectonValid = $true
         }
         elseif (Test-Json -Json $OrgCollection) {
             $Object = $OrgCollection | ConvertFrom-Json
-            if ($Object.id) {
-                $Id = $Object.id
+            if ($Object.organizationId) {
+                $OrganizationId = $Object.organizationId
             }
             $Body = $OrgCollection
             $OrgCollectonValid = $true
         }
 
-        if (-not $Id -or -not $OrganizationId -or -not $OrgCollectonValid) { 
+        if (-not $OrganizationId -or -not $OrgCollectonValid) { 
             Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string. An OrganizationId and an Id property must be specified"
             return
         }
@@ -1083,7 +1082,7 @@ function New-VaultOrgCollection {
         }
     }
 }
-#EndRegion '.\Public\Vault API\Collections & Organizations\New-VaultOrgCollection.ps1' 71
+#EndRegion '.\Public\Vault API\Collections & Organizations\New-VaultOrgCollection.ps1' 70
 #Region '.\Public\Vault API\Collections & Organizations\Remove-VaultOrgCollection.ps1' 0
 function Remove-VaultOrgCollection {
     <#
@@ -1110,16 +1109,18 @@ function Remove-VaultOrgCollection {
     
     Process {
         $Endpoint = 'object/org-collection/{0}' -f $Id
-
+        $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+        $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
         $VaultApi = @{
-            Method   = 'Delete'
-            Endpoint = $Endpoint
+            Method      = 'Delete'
+            Endpoint    = $Endpoint
+            QueryParams = $QueryParams
         }
     
         Invoke-VaultApi @VaultApi
     }
 }
-#EndRegion '.\Public\Vault API\Collections & Organizations\Remove-VaultOrgCollection.ps1' 35
+#EndRegion '.\Public\Vault API\Collections & Organizations\Remove-VaultOrgCollection.ps1' 37
 #Region '.\Public\Vault API\Collections & Organizations\Update-VaultOrgCollection.ps1' 0
 function Update-VaultOrgCollection {
     <#
@@ -1775,10 +1776,15 @@ function Unlock-Vault {
     # Set session variable for cli commands
     [Environment]::SetEnvironmentVariable('BW_SESSION', $Request.data.raw)
 
-    Write-Verbose $Request.data.title
+    if ($Request.success) {
+        Write-Verbose $Request.data.title
+    }
+    else {
+        Write-Verbose $Request.message
+    }
     $Request.success
 }
-#EndRegion '.\Public\Vault API\Lock & Unlock\Unlock-Vault.ps1' 33
+#EndRegion '.\Public\Vault API\Lock & Unlock\Unlock-Vault.ps1' 38
 #Region '.\Public\Vault API\Miscellaneous\Get-VaultStatus.ps1' 0
 function Get-VaultStatus {
     <#
@@ -1900,7 +1906,25 @@ function Start-RestServer {
     )
 
     try {
-        $RunningCli = Get-Process -PID $script:BwRestServer.PID -ErrorAction SilentlyContinue
+        if (!$script:BwRestServer) {
+            $BwServe = Get-Process -Pid (Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue).OwningProcess -ErrorAction SilentlyContinue
+            if ($BwServe.Id -gt 0) {
+                $RunningCli = $BwServe
+                $script:BwRestServer.PID = $BwServe.Id
+        
+                $script:BwRestServer = [PSCustomObject]@{
+                    PID      = $BwServe.Id
+                    Port     = $Port
+                    Hostname = $Hostname
+                }
+            }
+            else {
+                $RunningCli = $false
+            }
+        }
+        else {
+            $RunningCli = Get-Process -PID $script:BwRestServer.PID -ErrorAction SilentlyContinue
+        }
     }
     catch {
         Stop-RestServer
@@ -1928,7 +1952,7 @@ function Start-RestServer {
         
             do {
                 $VaultRest = Test-NetConnection -ComputerName $Hostname -Port $Port -InformationLevel Quiet -WarningAction SilentlyContinue
-                Start-Sleep -Seconds 1
+                Start-Sleep -Milliseconds 200
             } while (-not $VaultRest)
 
             $global:ProgressPreference = $OldProgPref
@@ -1945,7 +1969,7 @@ function Start-RestServer {
         }
     }
 }
-#EndRegion '.\Public\Vault API\REST\Start-RestServer.ps1' 71
+#EndRegion '.\Public\Vault API\REST\Start-RestServer.ps1' 89
 #Region '.\Public\Vault API\REST\Stop-RestServer.ps1' 0
 function Stop-RestServer {
     <#

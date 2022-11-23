@@ -7,7 +7,7 @@ function New-VaultOrgCollection {
     Calls POST /object/org-collection to create new org collections
     
     .PARAMETER OrgCollection
-    Full item object in pscustoobject or json format
+    Full item object in PSCustomObject or json format
 
     .LINK
     https://bitwarden.com/help/vault-management-api/
@@ -26,21 +26,20 @@ function New-VaultOrgCollection {
         $OrgCollectonValid = $false
 
         if ($OrgCollection.GetType().Name -eq 'pscustomobject') {
-            if ($OrgCollection.id) { $Id = $OrgCollection.id }
             if ($OrgCollection.organizationId) { $OrganizationId = $OrgCollection.organizationId }
             $Body = $OrgCollection | ConvertTo-Json -Depth 10
             $OrgCollectonValid = $true
         }
         elseif (Test-Json -Json $OrgCollection) {
             $Object = $OrgCollection | ConvertFrom-Json
-            if ($Object.id) {
-                $Id = $Object.id
+            if ($Object.organizationId) {
+                $OrganizationId = $Object.organizationId
             }
             $Body = $OrgCollection
             $OrgCollectonValid = $true
         }
 
-        if (-not $Id -or -not $OrganizationId -or -not $OrgCollectonValid) { 
+        if (-not $OrganizationId -or -not $OrgCollectonValid) { 
             Write-Error "Input validation failed for 'OrgCollection', valid types are pscustomobject or JSON string. An OrganizationId and an Id property must be specified"
             return
         }

@@ -23,7 +23,25 @@ function Start-RestServer {
     )
 
     try {
-        $RunningCli = Get-Process -PID $script:BwRestServer.PID -ErrorAction SilentlyContinue
+        if (!$script:BwRestServer) {
+            $BwServe = Get-Process -Pid (Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue).OwningProcess -ErrorAction SilentlyContinue
+            if ($BwServe.Id -gt 0) {
+                $RunningCli = $BwServe
+                $script:BwRestServer.PID = $BwServe.Id
+        
+                $script:BwRestServer = [PSCustomObject]@{
+                    PID      = $BwServe.Id
+                    Port     = $Port
+                    Hostname = $Hostname
+                }
+            }
+            else {
+                $RunningCli = $false
+            }
+        }
+        else {
+            $RunningCli = Get-Process -PID $script:BwRestServer.PID -ErrorAction SilentlyContinue
+        }
     }
     catch {
         Stop-RestServer
@@ -51,7 +69,7 @@ function Start-RestServer {
         
             do {
                 $VaultRest = Test-NetConnection -ComputerName $Hostname -Port $Port -InformationLevel Quiet -WarningAction SilentlyContinue
-                Start-Sleep -Seconds 1
+                Start-Sleep -Milliseconds 200
             } while (-not $VaultRest)
 
             $global:ProgressPreference = $OldProgPref

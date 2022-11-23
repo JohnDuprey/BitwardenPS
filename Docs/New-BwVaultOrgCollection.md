@@ -13,7 +13,7 @@ Creates Bitwarden Vault Org Collections
 ## SYNTAX
 
 ```
-New-BwVaultOrgCollection [-OrgCollection] <Object> [<CommonParameters>]
+New-BwVaultOrgCollection [-OrganizationId] <Object> [-OrgCollection] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,8 +30,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -OrgCollection
-Full item object in pscustoobject or json format
+### -OrganizationId
+{{ Fill OrganizationId Description }}
 
 ```yaml
 Type: Object
@@ -40,6 +40,21 @@ Aliases:
 
 Required: True
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OrgCollection
+Full item object in PSCustomObject or json format
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False

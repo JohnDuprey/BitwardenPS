@@ -6,12 +6,12 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  build:
+  publish:
     name: Publish PSGallery
     runs-on: ubuntu-latest
     steps:
       - name: Publish PowerShell Module
-        uses: pcgeek86/publish-powershell-module-action@v19
+        uses: pcgeek86/publish-powershell-module-action@v20
         with:
           modulePath: Output
           NuGetApiKey: ${{ secrets.PS_GALLERY_KEY }}

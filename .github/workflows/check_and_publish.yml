@@ -30,6 +30,14 @@ jobs:
         with:
           sarif_file: results.sarif
     
+      - name: PowerShell script
+        uses: Amadevus/pwsh-script@v2.0.3
+        id: Build-Module
+        with:
+          script: | 
+            Install-Module ModuleBuilder
+            Build-Module
+
       - name: Publish PowerShell Module
         uses: pcgeek86/publish-powershell-module-action@v20
         with:

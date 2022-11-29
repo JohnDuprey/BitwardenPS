@@ -23,10 +23,12 @@ function Remove-VaultOrgCollection {
     
     Process {
         $Endpoint = 'object/org-collection/{0}' -f $Id
-
+        $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+        $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
         $VaultApi = @{
-            Method   = 'Delete'
-            Endpoint = $Endpoint
+            Method      = 'Delete'
+            Endpoint    = $Endpoint
+            QueryParams = $QueryParams
         }
     
         Invoke-VaultApi @VaultApi

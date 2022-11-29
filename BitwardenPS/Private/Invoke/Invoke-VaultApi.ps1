@@ -11,9 +11,9 @@ function Invoke-VaultApi {
         $OutFile = ''
     )
 
-    Start-BwRestServer
+    Start-BwRestServer | Out-Null
 
-    Write-Verbose ($script:BwRestServer | ConvertTo-Json)
+    #Write-Verbose ($script:BwRestServer | ConvertTo-Json)
     $Uri = 'http://{0}:{1}/{2}' -f $script:BwRestServer.Hostname, $script:BwRestServer.Port, $Endpoint
 
     if ($QueryParams -ne '') {

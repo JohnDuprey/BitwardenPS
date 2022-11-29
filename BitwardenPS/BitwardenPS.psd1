@@ -12,7 +12,7 @@
     RootModule           = 'BitwardenPS.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '1.0.1.5'
+    ModuleVersion        = '1.0.1.6'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()

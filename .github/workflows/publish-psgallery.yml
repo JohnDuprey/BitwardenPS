@@ -13,5 +13,5 @@ jobs:
       - name: Publish PowerShell Module
         uses: pcgeek86/publish-powershell-module-action@v20
         with:
-          modulePath: Output
+          modulePath: ./Output/BitwardenPS
           NuGetApiKey: ${{ secrets.PS_GALLERY_KEY }}

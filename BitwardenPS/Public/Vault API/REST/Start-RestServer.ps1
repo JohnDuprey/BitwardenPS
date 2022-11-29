@@ -25,10 +25,9 @@ function Start-RestServer {
     try {
         if (!$script:BwRestServer) {
             $BwServe = Get-Process -Pid (Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue).OwningProcess -ErrorAction SilentlyContinue
-            if ($BwServe.Id -gt 0) {
+            if ($BwServe.Id -gt 0 -and $BwServe.Name -eq 'bw') {
+                Write-Verbose "REST server already running"
                 $RunningCli = $BwServe
-                $script:BwRestServer.PID = $BwServe.Id
-        
                 $script:BwRestServer = [PSCustomObject]@{
                     PID      = $BwServe.Id
                     Port     = $Port

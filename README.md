@@ -1,4 +1,5 @@
 # BitwardenPS Module
+[![BitwardenPSDownloads]][BitwardenPSGallery] ![BitwardenPSBuild]
 
 This module interacts with the Bitwarden Public API and the Vault API.
 
@@ -85,3 +86,8 @@ text           : @{text=Super secret text; hidden=False}
 # Notes
 
 This module is a work in progress. Pull requests are welcome.
+
+<!-- References -->
+[BitwardenPSDownloads]: https://img.shields.io/powershellgallery/dt/BitwardenPS
+[BitwardenPSGallery]: https://www.powershellgallery.com/packages/BitwardenPS/
+[BitwardenPSBuild]: https://img.shields.io/github/workflow/status/johnduprey/BitwardenPS/Check%20and%20Publish/main

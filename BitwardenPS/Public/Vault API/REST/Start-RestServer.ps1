@@ -24,8 +24,8 @@ function Start-RestServer {
 
     try {
         if (!$script:BwRestServer) {
-            $BwServe = Get-Process bw
-            $TestPort = Test-Connection -TargetName $Hostname -TcpPort $Port
+            $BwServe = Get-Process bw -ErrorAction SilentlyContinue
+            $TestPort = Test-Connection -IPv4 -TargetName $Hostname -TcpPort $Port
             if ($BwServe -and $TestPort) {
                 Write-Verbose 'REST server already running'
                 $RunningCli = $BwServe
@@ -64,7 +64,7 @@ function Start-RestServer {
             $Proc = Start-Process -FilePath $bw.Path -ArgumentList $Arguments -NoNewWindow -PassThru -ErrorAction Stop
         
             do {
-                $VaultRest = Test-Connection -TargetName $Hostname -TcpPort $Port
+                $VaultRest = Test-Connection -IPv4 -TargetName $Hostname -TcpPort $Port
                 Start-Sleep -Milliseconds 200
             } while (-not $VaultRest)
 

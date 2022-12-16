@@ -63,15 +63,10 @@ function Start-RestServer {
             Write-Verbose 'Starting REST server'
             $Proc = Start-Process -FilePath $bw.Path -ArgumentList $Arguments -NoNewWindow -PassThru -ErrorAction Stop
         
-            $OldProgPref = $global:ProgressPreference
-            $global:ProgressPreference = 'SilentlyContinue'
-        
             do {
-                $VaultRest = Test-NetConnection -ComputerName $Hostname -Port $Port -InformationLevel Quiet -WarningAction SilentlyContinue
+                $VaultRest = Test-Connection -TargetName $Hostname -TcpPort $Port
                 Start-Sleep -Milliseconds 200
             } while (-not $VaultRest)
-
-            $global:ProgressPreference = $OldProgPref
 
             $script:BwRestServer = [PSCustomObject]@{
                 PID      = $Proc.Id

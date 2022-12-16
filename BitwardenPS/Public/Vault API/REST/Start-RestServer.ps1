@@ -24,9 +24,10 @@ function Start-RestServer {
 
     try {
         if (!$script:BwRestServer) {
-            $BwServe = Get-Process -Pid (Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue).OwningProcess -ErrorAction SilentlyContinue
-            if ($BwServe.Id -gt 0 -and $BwServe.Name -eq 'bw') {
-                Write-Verbose "REST server already running"
+            $BwServe = Get-Process bw
+            $TestPort = Test-Connection -TargetName $Hostname -TcpPort $Port
+            if ($BwServe -and $TestPort) {
+                Write-Verbose 'REST server already running'
                 $RunningCli = $BwServe
                 $script:BwRestServer = [PSCustomObject]@{
                     PID      = $BwServe.Id
@@ -53,11 +54,10 @@ function Start-RestServer {
             "--port $Port"
             "--hostname $Hostname"    
         )
-
         try {
             $bw = Get-Command bw
             if (!$bw) {
-                Write-Error 'Bitwarden CLI is not installed'
+                Write-Error 'Bitwarden CLI is not installed, visit https://bitwarden.com/help/cli/#download-and-install for more information.'
                 return $false
             }
             Write-Verbose 'Starting REST server'
@@ -76,7 +76,7 @@ function Start-RestServer {
             $script:BwRestServer
         }
         catch {
-            Write-Error 'Could not start REST server'
+            Write-Error "Could not start REST server. Exception: $($_.Exception.Message)"
         }
     }
 }

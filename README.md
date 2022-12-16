@@ -1,5 +1,11 @@
 # BitwardenPS Module
-[![BitwardenPSDownloads]][BitwardenPSGallery] ![BitwardenPSBuild]
+[![Downloads]][Gallery] ![Build] ![Publish]
+
+<!-- References -->
+[Downloads]: https://img.shields.io/powershellgallery/dt/BitwardenPS
+[Gallery]: https://www.powershellgallery.com/packages/BitwardenPS/
+[Build]: https://img.shields.io/github/actions/workflow/status/johnduprey/BitwardenPS/psscriptanalyzer.yml?branch=main&label=PSScriptAnalyzer
+[Publish]: https://github.com/johnduprey/BitwardenPS/actions/workflows/publish.yml/badge.svg
 
 This module interacts with the Bitwarden Public API and the Vault API.
 
@@ -87,7 +93,3 @@ text           : @{text=Super secret text; hidden=False}
 
 This module is a work in progress. Pull requests are welcome.
 
-<!-- References -->
-[BitwardenPSDownloads]: https://img.shields.io/powershellgallery/dt/BitwardenPS
-[BitwardenPSGallery]: https://www.powershellgallery.com/packages/BitwardenPS/
-[BitwardenPSBuild]: https://img.shields.io/github/workflow/status/johnduprey/BitwardenPS/Check%20and%20Publish/main

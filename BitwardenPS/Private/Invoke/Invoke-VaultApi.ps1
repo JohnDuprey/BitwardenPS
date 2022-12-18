@@ -22,7 +22,7 @@ function Invoke-VaultApi {
         $Uri = $UriBuilder.Uri.OriginalString  
     }
 
-    Write-Verbose $Uri
+    Write-Verbose "$($Method.ToUpper()) [ $Uri ]"
 
     $Headers = @{
         'Accept' = 'application/json'
@@ -39,7 +39,6 @@ function Invoke-VaultApi {
         }
         $RestMethod.Headers = $Headers
     }
-    Write-Verbose ($Headers | ConvertTo-Json)
 
     if ($OutFile) {
         Invoke-WebRequest @RestMethod -OutFile $OutFile

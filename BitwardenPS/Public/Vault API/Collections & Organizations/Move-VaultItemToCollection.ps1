@@ -19,7 +19,7 @@ function Move-VaultItemToCollection {
     https://bitwarden.com/help/vault-management-api/
     
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     Param(
         [Parameter(Mandatory = $true)]
         $ItemId,
@@ -38,13 +38,15 @@ function Move-VaultItemToCollection {
         Method   = 'Post'
     }
 
-    $Request = Invoke-VaultApi @VaultApi
+    if ($PSCmdlet.ShouldProcess($ItemId)) {
+        Invoke-VaultApi @VaultApi
 
-    if ($Request.success) {
-        $Request.data
+        if ($Request.success) {
+            $Request.data
+        }
+        else {
+            Write-Host $Request.message
+            $Request.success
+        } 
     }
-    else {
-        Write-Host $Request.message
-        $Request.success
-    } 
 }

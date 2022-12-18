@@ -13,7 +13,7 @@ function Remove-VaultItem {
     https://bitwarden.com/help/vault-management-api/
 
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     Param(
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
@@ -26,6 +26,8 @@ function Remove-VaultItem {
             Endpoint = $Endpoint
         }
     
-        Invoke-VaultApi @VaultApi
+        if ($PSCmdlet.ShouldProcess($Id)) {
+            Invoke-VaultApi @VaultApi
+        }
     }
 }

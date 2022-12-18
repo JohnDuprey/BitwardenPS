@@ -27,6 +27,7 @@ function Get-VaultOrgs {
 
     if ($Request.success) {
         $Request.data.data
+        $script:VaultOrgs = $Request.data.data
     }
     else {
         Write-Host $Request.message

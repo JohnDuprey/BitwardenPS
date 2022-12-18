@@ -16,7 +16,7 @@ function Confirm-VaultOrgMember {
     https://bitwarden.com/help/vault-management-api/
     
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     Param(
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id,
@@ -29,6 +29,8 @@ function Confirm-VaultOrgMember {
         $QueryParams.Add('organizationid', $OrganizationId) | Out-Null
 
         $Endpoint = 'confirm/org-member/{0}' -f $Id
-        Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
+        if ($PSCmdlet.ShouldProcess($Id)) {
+            Invoke-VaultApi -Endpoint $Endpoint -QueryParams $QueryParams
+        }
     }
 }

@@ -13,7 +13,7 @@ function Restore-VaultItem {
     https://bitwarden.com/help/vault-management-api/
 
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     Param(
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
@@ -28,6 +28,8 @@ function Restore-VaultItem {
             Body     = $Body
         }
     
-        Invoke-VaultApi @VaultApi
+        if ($PSCmdlet.ShouldProcess($Id)) {
+            Invoke-VaultApi @VaultApi
+        }
     }
 }

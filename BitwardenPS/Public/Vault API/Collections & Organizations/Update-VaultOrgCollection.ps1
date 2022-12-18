@@ -16,7 +16,7 @@ function Update-VaultOrgCollection {
     https://bitwarden.com/help/vault-management-api/
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'BodyUpdate')]
+    [CmdletBinding(DefaultParameterSetName = 'BodyUpdate',SupportsShouldProcess)]
     Param(
         [Parameter(ParameterSetName = 'BodyUpdate', Mandatory = $true)]
         $Id,
@@ -63,16 +63,18 @@ function Update-VaultOrgCollection {
             QueryParams = $QueryParams
         }
     
-        $Request = Invoke-VaultApi @VaultApi
-
-        if ($Request.success) {
-            if ($Request.data) {
-                $Request.data
+        if ($PSCmdlet.ShouldProcess($Id)) {
+            $Request = Invoke-VaultApi @VaultApi
+        
+            if ($Request.success) {
+                if ($Request.data) {
+                    $Request.data
+                }
             }
-        }
-        else {
-            Write-Host $Request.message
-            $Request.success
+            else {
+                Write-Host $Request.message
+                $Request.success
+            }
         }
     }
 }

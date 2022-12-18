@@ -16,7 +16,7 @@ function Remove-VaultAttachment {
     https://bitwarden.com/help/vault-management-api/
 
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     Param(
         [Parameter(Mandatory = $true)]
         $Id,
@@ -35,5 +35,7 @@ function Remove-VaultAttachment {
         QueryParams = $QueryParams
     }
     
-    Invoke-VaultApi @VaultApi
+    if ($PSCmdlet.ShouldProcess($Id)) {
+        Invoke-VaultApi @VaultApi
+    }
 }

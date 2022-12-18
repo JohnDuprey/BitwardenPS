@@ -13,7 +13,7 @@ function Remove-VaultFolder {
     https://bitwarden.com/help/vault-management-api/
 
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     Param(
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id
@@ -26,6 +26,9 @@ function Remove-VaultFolder {
             Method   = 'Delete'
             Endpoint = $Endpoint
         }
-        Invoke-VaultApi @VaultApi
+        
+        if ($PSCmdlet.ShouldProcess($Id)) {
+            Invoke-VaultApi @VaultApi
+        }
     }
 }

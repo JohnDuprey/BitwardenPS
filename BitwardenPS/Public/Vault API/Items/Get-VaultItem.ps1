@@ -14,9 +14,15 @@ function Get-VaultItem {
     
     .PARAMETER OrganizationId
     Organization Guid
+
+    .PARAMETER Organization
+    Name of organization
     
     .PARAMETER CollectionId
     Collection Guid
+
+    .PARAMETER Collection
+    Name of collection
     
     .PARAMETER FolderId
     Folder Guid
@@ -38,25 +44,56 @@ function Get-VaultItem {
     Param(
         [Parameter(ParameterSetName = 'Single', Mandatory = $true)]
         $Id,
+        
         [Parameter(ParameterSetName = 'Single')]
         [switch]$AsCredential,
 
         [Parameter(ParameterSetName = 'List')]
         $OrganizationId = '',
+
+        [Parameter(ParameterSetName = 'List')]
+        $Organization = '',
+        
         [Parameter(ParameterSetName = 'List')]
         $CollectionId = '',
+        
+        [Parameter(ParameterSetName = 'List')]
+        $Collection,
+
         [Parameter(ParameterSetName = 'List')]
         $FolderId = '',
+        
         [Parameter(ParameterSetName = 'List')]
         $Search = '',
+        
         [Parameter(ParameterSetName = 'List')]
         $Url = '',
+        
         [Parameter(ParameterSetName = 'List')]
         [switch]$Trash
     )
 
     switch ($PSCmdlet.ParameterSetName) {
         'List' {
+
+            if ($Collection) {
+                if (!$script:VaultCollections) {
+                    Get-VaultCollections | Out-Null
+                }
+                $CollectionObj = $script:VaultCollections | Where-Object { $_.name -eq $Collection }
+                $CollectionId = $CollectionObj.id
+                Write-Verbose "Collection: $Collection ($CollectionId)"
+            }
+
+            if ($Organization) {
+                if (!$script:VaultOrgs) {
+                    Get-VaultOrgs | Out-Null
+                }
+                $OrgObj = $script:VaultOrgs | Where-Object { $_.name -eq $Organization }
+                $OrganizationId = $OrgObj.id
+                Write-Verbose "Organization: $Organization ($OrganizationId)"
+            }
+
             $QueryParams = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
 
             $Endpoint = 'list/object/items'

@@ -16,7 +16,7 @@ function Update-VaultFolder {
     https://bitwarden.com/help/vault-management-api/
 
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     Param(
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         $Id,
@@ -37,16 +37,18 @@ function Update-VaultFolder {
             Body     = $Body
         }
     
-        $Request = Invoke-VaultApi @VaultApi
+        if ($PSCmdlet.ShouldProcess($Id)) {
+            $Request = Invoke-VaultApi @VaultApi
 
-        if ($Request.success) {
-            if ($Request.data) {
-                $Request.data
+            if ($Request.success) {
+                if ($Request.data) {
+                    $Request.data
+                }
             }
-        }
-        else {
-            Write-Host $Request.message
-            $Request.success
+            else {
+                Write-Host $Request.message
+                $Request.success
+            }
         }
     }
 }

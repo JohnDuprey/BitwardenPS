@@ -27,6 +27,7 @@ function Get-VaultCollections {
 
     if ($Request.success) {
         $Request.data.data
+        $script:VaultCollections = $Request.data.data
     }
     else {
         Write-Host $Request.message

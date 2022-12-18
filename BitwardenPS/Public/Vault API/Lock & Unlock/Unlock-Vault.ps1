@@ -15,23 +15,28 @@ function Unlock-Vault {
     #>
     [CmdletBinding()]
     Param(
-        [PSCredential]$Credential = (Get-Credential -UserName 'Master Password' )
+        [PSCredential]$Credential
     )
+    if ((Get-VaultStatus).status -ne 'unlocked') {
+        if (!$Credential) { $Credential = Get-Credential -UserName 'Master Password' }
+        $Body = @{
+            password = $Credential.GetNetworkCredential().Password 
+        } | ConvertTo-Json -Compress
 
-    $Body = @{
-        password = $Credential.GetNetworkCredential().Password 
-    } | ConvertTo-Json -Compress
-
-    $Request = Invoke-VaultApi -Endpoint 'unlock' -Method 'Post' -Body $Body
+        $Request = Invoke-VaultApi -Endpoint 'unlock' -Method 'Post' -Body $Body
     
-    # Set session variable for cli commands
-    [Environment]::SetEnvironmentVariable('BW_SESSION', $Request.data.raw)
+        # Set session variable for cli commands
+        [Environment]::SetEnvironmentVariable('BW_SESSION', $Request.data.raw)
 
-    if ($Request.success) {
-        Write-Verbose $Request.data.title
+        if ($Request.success) {
+            Write-Verbose $Request.data.title
+        }
+        else {
+            Write-Verbose $Request.message
+        }
+        $Request.success
     }
     else {
-        Write-Verbose $Request.message
+        $true
     }
-    $Request.success
 }

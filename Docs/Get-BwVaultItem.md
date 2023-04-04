@@ -14,8 +14,8 @@ Gets Bitwarden Vault Items
 
 ### List (Default)
 ```
-Get-BwVaultItem [-OrganizationId <Object>] [-CollectionId <Object>] [-FolderId <Object>] [-Search <Object>]
- [-Url <Object>] [-Trash] [<CommonParameters>]
+Get-BwVaultItem [-OrganizationId <Object>] [-Organization <Object>] [-CollectionId <Object>]
+ [-Collection <Object>] [-FolderId <Object>] [-Search <Object>] [-Url <Object>] [-Trash] [<CommonParameters>]
 ```
 
 ### Single
@@ -82,8 +82,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Organization
+Name of organization
+
+```yaml
+Type: Object
+Parameter Sets: List
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -CollectionId
 Collection Guid
+
+```yaml
+Type: Object
+Parameter Sets: List
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Collection
+Name of collection
 
 ```yaml
 Type: Object

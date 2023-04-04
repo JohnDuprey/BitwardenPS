@@ -19,7 +19,7 @@ function Invoke-VaultApi {
     if ($QueryParams -ne '') {
         $UriBuilder = [System.UriBuilder]$Uri
         $UriBuilder.Query = $QueryParams.ToString()
-        $Uri = $UriBuilder.Uri.OriginalString  
+        $Uri = $UriBuilder.Uri.OriginalString
     }
 
     Write-Verbose "$($Method.ToUpper()) [ $Uri ]"
@@ -42,8 +42,7 @@ function Invoke-VaultApi {
 
     if ($OutFile) {
         Invoke-WebRequest @RestMethod -OutFile $OutFile
-    }
-    else {
+    } else {
         Invoke-RestMethod @RestMethod -SkipHttpErrorCheck
     }
 }

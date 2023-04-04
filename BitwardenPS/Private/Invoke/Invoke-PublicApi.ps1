@@ -36,8 +36,7 @@ function Invoke-PublicApi {
     $Response = Invoke-RestMethod @RestMethod -SkipHttpErrorCheck
     if ($Response.data) {
         $Response.data
-    }
-    else {
+    } else {
         $Response
     }
 }

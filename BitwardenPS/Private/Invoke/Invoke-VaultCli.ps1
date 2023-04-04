@@ -2,7 +2,7 @@ function Invoke-VaultCli {
     <#
     .SYNOPSIS
     Runs Bitwarden Cli commands
-    
+
     .DESCRIPTION
     Calls bw command
 

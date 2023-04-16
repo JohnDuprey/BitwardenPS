@@ -14,13 +14,13 @@ Updates Bitwarden Vault Items
 
 ### BodyUpdate (Default)
 ```
-Update-BwVaultOrgCollection -Id <Object> -OrganizationId <Object> [-OrgCollection <Object>]
- [<CommonParameters>]
+Update-BwVaultOrgCollection -Id <Object> -OrganizationId <Object> [-OrgCollection <Object>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### FullObject
 ```
-Update-BwVaultOrgCollection [-OrgCollection <Object>] [<CommonParameters>]
+Update-BwVaultOrgCollection [-OrgCollection <Object>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -86,6 +86,37 @@ Accept wildcard characters: False
 Type: Object
 Parameter Sets: FullObject
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named

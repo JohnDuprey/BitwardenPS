@@ -15,12 +15,12 @@ Creates Bitwarden Send
 ### SendParams (Default)
 ```
 New-BwSend -Name <Object> [-Notes <Object>] [-SendPass <Object>] -Text <Object> [-Days <Int32>]
- [-MaxAccessCount <Int32>] [-HideText] [-HideEmail] [<CommonParameters>]
+ [-MaxAccessCount <Int32>] [-HideText] [-HideEmail] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### FullObject
 ```
-New-BwSend -Send <Object> [<CommonParameters>]
+New-BwSend -Send <Object> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -169,6 +169,37 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

@@ -10,7 +10,7 @@ $VaultCollectionCompleter = {
         Get-BwVaultCollections | Out-Null
     }
 
-    $Collection = $Collection -replace "'",''
+    $Collection = $Collection -replace "'", ''
     ($script:VaultCollections).name | Where-Object { $_ -match "$Collection" } | ForEach-Object { "'$_'" }
 }
 

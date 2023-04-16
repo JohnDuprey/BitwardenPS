@@ -17,7 +17,7 @@ function Unlock-BwVault {
     Param(
         [PSCredential]$Credential
     )
-    if ((Get-VaultStatus).status -ne 'unlocked') {
+    if ((Get-BwVaultStatus).status -ne 'unlocked') {
         if (!$Credential) { $Credential = Get-Credential -UserName 'Master Password' }
         $Body = @{
             password = $Credential.GetNetworkCredential().Password

@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Set-BwSecretsAccessToken [[-AccessToken] <Object>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-BwSecretsAccessToken [[-AccessToken] <Object>] [-Unset] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -52,6 +52,21 @@ Prompts you for confirmation before running the cmdlet.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Unset
+{{ Fill Unset Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named

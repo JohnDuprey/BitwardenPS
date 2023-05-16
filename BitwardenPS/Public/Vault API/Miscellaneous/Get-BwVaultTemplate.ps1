@@ -1,14 +1,14 @@
-function Get-VaultTemplate {
+function Get-BwVaultTemplate {
     <#
     .SYNOPSIS
     Returns vault template object
-    
+
     .DESCRIPTION
     Calls /template/{type} endpoint
 
     .LINK
     https://bitwarden.com/help/vault-management-api/
-    
+
     #>
     [cmdletbinding()]
     Param(

@@ -20,7 +20,7 @@ function Start-BwRestServer {
     [cmdletbinding()]
     Param(
         $Port = 8087,
-        $Hostname = 'localhost'
+        $Hostname = '127.0.0.1'
     )
 
     try {

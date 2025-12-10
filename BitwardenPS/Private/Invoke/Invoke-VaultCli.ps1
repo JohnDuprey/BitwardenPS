@@ -12,7 +12,7 @@ function Invoke-VaultCli {
         $Arguments
     )
 
-    $bw = Get-Command bw
+    $bw = Get-Command bw -ErrorAction SilentlyContinue
     if (!$bw) {
         Write-Error 'Bitwarden CLI is not installed'
         return $false

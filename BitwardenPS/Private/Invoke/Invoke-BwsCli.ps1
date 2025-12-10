@@ -12,7 +12,7 @@ function Invoke-BwsCli {
         $Arguments
     )
 
-    $bw = Get-Command bws
+    $bw = Get-Command bws -ErrorAction SilentlyContinue
     if (!$bw) {
         Write-Error 'Bitwarden Secrets CLI is not installed'
         return $false

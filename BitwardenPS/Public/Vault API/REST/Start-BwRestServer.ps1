@@ -53,7 +53,7 @@ function Start-BwRestServer {
             "--hostname $Hostname"
         )
         try {
-            $bw = Get-Command bw
+            $bw = Get-Command bw -ErrorAction SilentlyContinue
             if (!$bw) {
                 Write-Error 'Bitwarden CLI is not installed, visit https://bitwarden.com/help/cli/#download-and-install for more information.'
                 return $false
